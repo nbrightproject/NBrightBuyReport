@@ -1,0 +1,73 @@
+﻿@inherits NBrightBuy.render.NBrightBuyRazorTokens<NBrightDNN.NBrightRazor>
+@using NBrightDNN
+@using NBrightDNN
+
+
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('.cmdSelection').click(function () {
+            $('.processing').show();
+            $('input[[id*="_itemid_"]]').val($(this).attr('itemid'));
+            nbxreportget('reportselection', '#selectparams', '.reportlist');
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').show();
+            $('#cmdAdd').hide();
+            $('#cmdRun').show();
+            $('.resultsrow').hide();
+            $('#importshow').hide();
+        });
+
+    }
+)
+</script>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="box">
+            <div class="box-content">
+                <table class="table table-striped table-hover table-responsive">
+                    <thead>
+                        <tr style="width: 100%">
+                            <th>@ResourceKey("Admin.ref")</th>
+                            <th>@ResourceKey("Admin.name")</th>
+                            <th></th>
+                            <th>@ResourceKey("Admin.disabled")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (NBrightInfo x in Model.List)
+                        {
+                            // dummy record inject for empty list
+                            if (x.ItemID > 0)
+                            {
+                                <tr>
+                                    <td>@x.GUIDKey</td>
+                                    <td>@x.GetXmlProperty("genxml/lang/genxml/textbox/name")</td>
+                                    <td></td>
+                                    <td>
+                                        @{var i = "fa-circle";
+                                            if (x.GetXmlPropertyBool("genxml/checkbox/disabled"))
+                                            {
+                                                i = "fa-check-circle";
+                                            }
+                                        }
+                                        <i class="fa  @i fa-2x"></i>
+                                    </td>
+                                    <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td>
+                                    <td><span class="cmdSelection"  itemid="@x.ItemID">@ResourceKey("General.cmdSelection")</span></td>
+                                </tr>
+                                                }
+                                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

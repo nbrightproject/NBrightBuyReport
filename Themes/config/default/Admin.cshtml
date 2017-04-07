@@ -1,0 +1,51 @@
+@inherits NBrightBuy.render.NBrightBuyRazorTokens<NBrightDNN.NBrightRazor>
+@using System.Globalization
+@using NBrightDNN
+
+<!-- Load these scripts to use nbrightajax functions -->
+<script type="text/javascript" src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.genxmlajax.js"></script>
+<script type="text/javascript" src="/DesktopModules/NBright/NBrightBuyReport/Themes/config/js/NBrightBuyPlugin.js"></script>
+
+<!-- The basic File Upload plugin -->
+<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>
+
+<!--Resource path-->
+
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
+
+<!-- div section to pass param data to the server side ajax functions -->
+<div id="selectparams">
+    <input id="lang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
+    <input id="editlang" type="hidden" value="" /> <!-- culture code being edited -->
+    <input id="selecteditemid" type="hidden" value="" /> <!-- used as selected edit itemid -->
+    <input id="newitem" type="hidden" value="" /><!-- used to hold "new" token to create new record -->
+    <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
+</div>
+
+<input id="deletemsg" type="hidden" value="@ResourceKey("Admin.deletemsg")"/> <!-- used for prompt on delete -->
+
+<div id="nbsnotify"></div>
+<div id="loader" class="processing" style="display:none;">@ResourceKey("General.ProcessingDiv")</div>
+
+
+<div id="pageactionssource"><!-- Page actions are moved into header bar - also exist at page bottom-->
+	<div class="col-xs-9 col-sm-9">
+		<a href="#" class="show-sidebar">
+		  <i class="fa fa-bars"></i>
+		</a>
+		<div class="actionbuttonwrapper">
+            <button id="cmdsave" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdSaveButton")</button>
+		    <button id="addnew" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdAddButton")</button>
+		    <button id="cmddelete" type="button" class="btn btn-danger" style="display: none;">@ResourceKey("General.cmdDeleteButton")</button>
+		    <button id="cmdreturn" type="button" class="btn btn-default" style="display: none;">@ResourceKey("General.cmdReturnButton")</button>
+		</div>
+	</div>
+    <div class="col-xs-3 col-sm-3 top-panel-right">
+        @EditCultureSelect("editlanguage", "")
+    </div>
+</div>
+
+<br />
+
+<div id="editdata"></div>

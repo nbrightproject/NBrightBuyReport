@@ -1,0 +1,107 @@
+﻿@inherits NBrightBuy.render.NBrightBuyRazorTokens<NBrightDNN.NBrightRazor>
+@using System.Globalization
+@using System.Linq
+@using System.Web.UI.WebControls
+@using NBrightDNN
+@using Nevoweb.DNN.NBrightBuy.Components
+
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
+@AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
+
+<!-- The basic File Upload plugin -->
+<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>
+<!--The Datepicker plugin-->
+<script type="text/javascript" src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.datepick.xlang.eur.js"></script>
+<script>
+
+    $(function () {
+
+        if (!Modernizr.inputtypes.date) {
+
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            if ("culturecode" == 'en-GB') $.datepicker.setDefaults($.datepicker.regional['en-GB']);
+            if ("culturecode" == 'fr-FR') $.datepicker.setDefaults($.datepicker.regional['fr']);
+            if ("culturecode" == 'nl-NL') $.datepicker.setDefaults($.datepicker.regional['nl']);
+
+            $('input[type=date]').datepicker();
+        }
+
+    });
+
+</script>
+
+@{
+    // assign Model, so we can resolve var in VS
+    var info = (NBrightInfo)Model.List.First();
+}
+
+<input id="itemid" type="hidden" value="@info.ItemID" />
+<input id="editlang" type="hidden" value="@info.Lang" />
+<input id="lang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
+
+<!--Report name  -->
+
+<div class="col-sm-5">
+    <h2>@ResourceKey("Admin.name")</h2>
+    @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
+</div>
+
+<!--Ref report -->
+
+<h4>@ResourceKey("Admin.ref"): @info.GUIDKey</h4>
+<div class="col-xs-12 col-sm-12">
+    <div class="form-group">
+        <div class="col-sm-12">
+            <div class="col-sm-12">
+
+                <!--Download report-->
+
+                @{
+                    var rk2 = ResourceKey("Admin.download").ToString();
+                }
+
+                <div class="col-sm-12">
+                    @CheckBox(info, "genxml/checkbox/download", rk2, "")
+                </div>
+
+                <!--In-line report-->
+
+                @{
+                    var rk3 = ResourceKey("Admin.inline").ToString();
+                }
+
+                <div class="col-sm-12">
+                    @CheckBox(info, "genxml/checkbox/inline", rk3, "")
+                </div>
+
+                <!--Disabled checkbox  -->
+
+                @{
+                    var rk1 = ResourceKey("Admin.disabled").ToString();
+                }
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        @CheckBox(info, "genxml/checkbox/disabled", rk1, "")
+                    </div>
+                </div>
+            </div>
+
+            <!--Report description-->
+
+            <div class="col-sm-12">
+                <label>@ResourceKey("Admin.description")</label><img src='/Images/Flags/@(info.Lang).gif' width='16px' />
+                @TextArea(info, "genxml/lang/genxml/textbox/description", "class='form-control' rows='4' ")
+            </div>
+        </div>
+
+        <!--SQL textbox-->
+
+        <div class="col-sm-12">
+            <label>@ResourceKey("Admin.sql")</label>
+            @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
+        </div>
+    </div>
+</div>
+
+
+
