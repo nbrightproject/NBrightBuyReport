@@ -364,7 +364,7 @@ namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
                     if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
 
                     var objCtrl = new NBrightBuyController();
-                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
+                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"])); 
                     if (obj != null)
                     {
                         var xslTemp = obj.GetXmlProperty("genxml/textbox/templatexsl");
