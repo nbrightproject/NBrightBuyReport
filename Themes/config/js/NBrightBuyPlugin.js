@@ -169,15 +169,12 @@ function NBrightBuyBasePlugin_nbxgetCompleted(e) {
         NBrightBuyBasePlugin_ListButtons();
         $('.edititem').click(function () {
             $('.processing').show();
-            $('#selecteditemid').val($(this).attr("itemid")); // assign the sleected itemid, so the server knows what item is being edited
+            $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
             NBrightBuyBasePlugin_nbxget('getdata', '#selectparams', '#editdata'); // do ajax call to get edit form
         });
         $(".catdisplay").prop("disabled", true);
         $(".propdisplay").prop("disabled", true);
     }
-
-
-
 }
 
 function NBrightBuyBasePlugin_DetailButtons() {

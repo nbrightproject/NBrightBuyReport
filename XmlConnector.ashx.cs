@@ -481,12 +481,12 @@ namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
             //var footerTempl = NBrightBuyUtils.GetTemplateData("listf.html", "", "config", StoreSettings.Current.Settings());
 
             var obj = new NBrightInfo(true);
-            strOut = GenXmlFunctions.RenderRepeater(obj, headerTempl);
+            //strOut = GenXmlFunctions.RenderRepeater(obj, headerTempl);
 
             var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "NBSREPORT", "", "", "", "", true);
             strOut += GenXmlFunctions.RenderRepeater(objList, bodyTempl);
 
-            strOut += GenXmlFunctions.RenderRepeater(obj, footerTempl);
+            //strOut += GenXmlFunctions.RenderRepeater(obj, footerTempl);
 
             Utils.SetCache(cachekey, strOut);
 

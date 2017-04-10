@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
 
-                        @foreach (NBrightInfo x in Model.List) 
+                        @foreach (NBrightInfo x in Model.List)
                         {
                             // dummy record inject for empty list
                             if (x.ItemID > 0)
@@ -60,10 +60,10 @@
                                         <i class="fa  @i fa-2x"></i>
                                     </td>
                                     <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td>
-                                    <td><span class="cmdSelection" itemid="@x.ItemID">@ResourceKey("General.cmdSelection")<i title="Générer le rapport" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
+                                    <td><span class="cmdSelection" itemid="@x.ItemID">@ResourceKey("General.runreport")<i title="Générer le rapport" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
                                 </tr>
-                            }
-                        }
+                                                }
+                                            }
                     </tbody>
                 </table>
             </div>
