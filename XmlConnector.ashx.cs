@@ -334,7 +334,7 @@ namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
                     if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
 
                     var objCtrl = new NBrightBuyController();
-                    var bodyTempl = NBrightBuyUtils.GetTemplateData("detail.html", "", "config", StoreSettings.Current.Settings());
+                    var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTfields.html", "", "config", StoreSettings.Current.Settings());
 
                     var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
                     if (obj != null)
@@ -476,14 +476,14 @@ namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
 
             var objCtrl = new NBrightBuyController();
 
-            var headerTempl = NBrightBuyUtils.GetTemplateData("listh.html", "", "config", StoreSettings.Current.Settings());
-            var bodyTempl = NBrightBuyUtils.GetTemplateData("listb.html", "", "config", StoreSettings.Current.Settings());
-            var footerTempl = NBrightBuyUtils.GetTemplateData("listf.html", "", "config", StoreSettings.Current.Settings());
+           // var headerTempl = NBrightBuyUtils.GetTemplateData("listh.html", "", "config", StoreSettings.Current.Settings());
+            var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTlist.cshtml", "", "config", StoreSettings.Current.Settings());
+            //var footerTempl = NBrightBuyUtils.GetTemplateData("listf.html", "", "config", StoreSettings.Current.Settings());
 
             var obj = new NBrightInfo(true);
             strOut = GenXmlFunctions.RenderRepeater(obj, headerTempl);
 
-            var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "REPORT", "", "", "", "", true);
+            var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "NBSREPORT", "", "", "", "", true);
             strOut += GenXmlFunctions.RenderRepeater(objList, bodyTempl);
 
             strOut += GenXmlFunctions.RenderRepeater(obj, footerTempl);
