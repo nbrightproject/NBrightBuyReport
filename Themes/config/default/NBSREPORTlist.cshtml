@@ -5,27 +5,6 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-
-        $('.cmdSelection').click(function () {
-            $('.processing').show();
-            $('input[[id*="_itemid_"]]').val($(this).attr('itemid'));
-            nbxreportget('reportselection', '#selectparams', '.reportlist');
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').show();
-            $('#cmdAdd').hide();
-            $('#cmdRun').show();
-            $('.resultsrow').hide();
-            $('#importshow').hide();
-        });
-
-    }
-)
-</script>
-
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <div class="box">
@@ -60,7 +39,7 @@
                                         <i class="fa  @i fa-2x"></i>
                                     </td>
                                     <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td>
-                                    <td><span class="cmdSelection" itemid="@x.ItemID">@ResourceKey("General.runreport")<i title="Générer le rapport" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
+                                    <td><span class="cmdSelection" itemid="@x.ItemID">@ResourceKey("View.runreport")<i title="Générer le rapport" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
                                 </tr>
                                                 }
                                             }

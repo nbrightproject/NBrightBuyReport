@@ -20,14 +20,16 @@ using DataProvider = DotNetNuke.Data.DataProvider;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
 using Nevoweb.DNN.NBrightBuy.Components;
+using System.Web;
 
-namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
+namespace Nevoweb.DNN.NBrightBuyReport
 {
     /// <summary>
     /// Summary description for XMLconnector
     /// </summary>
     public class XmlConnector : IHttpHandler
     {
+        private readonly JavaScriptSerializer _js = new JavaScriptSerializer();
         private String _lang = "";
         private String _itemid = "";
 
@@ -80,11 +82,35 @@ namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
                         case "deleterecord":
                             strOut = DeleteData(context);
                             break;
+                        case "runreport":
+                            strOut = RunReport(context);
+                            break;
                         case "savedata":
                             strOut = SaveData(context);
                             break;
                         case "selectlang":
                             strOut = SaveData(context);
+                            break;
+                        case "addreport":
+                            strOut = AddReport(context);
+                            break;
+                        case "savereport":
+                            strOut = SaveReport(context);
+                            break;
+                        case "deletereport":
+                            strOut = DeleteReport(context);
+                            break;
+                        case "getreportlist":
+                            strOut = GetReportList(context);
+                            break;
+                        case "editreport":
+                            strOut = EditReport(context);
+                            break;
+                        case "reportselection":
+                            strOut = ReportSelection(context);
+                            break;
+                        case "checkadminrights":
+                            strOut = CheckAdminRights(context);
                             break;
                     }
                 }

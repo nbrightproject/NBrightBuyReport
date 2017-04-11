@@ -15,34 +15,183 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('.processing').show();
+
+        $('a[[id*="_cmdExport_"]]').hide();
+
+        nbxreportget('getreportlist', '#selectparams', '.reportlist');
+
+        $('#cmdAdd').click(function () {
+            $('.processing').show();
+            $('.resultsrow').hide();
+            nbxreportget('addreport', '#selectparams', '.reportlist');
+        });
+
+        $('#cmdSave').click(function () {
+            $('.processing').show();
+            nbxreportget('savereport', '.reportlist', '.reportlist');
+            $('#importshow').show();
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').hide();
+            $('#cmdAdd').show();
+            $('.cmdDownload').hide();
+            $('#cmdRun').hide();
+            $('.resultsrow').hide();
+            $('a[[id*="_cmdExport_"]]').hide();
+        });
+
+        $('#cmdDelete').click(function () {
+            $('.processing').show();
+            nbxreportget('deletereport', '.reportlist', '.reportlist');
+            $('#importshow').show();
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').hide();
+            $('#cmdAdd').show();
+            $('.cmdDownload').hide();
+            $('#cmdRun').hide();
+            $('.resultsrow').hide();
+            $('a[[id*="_cmdExport_"]]').hide();
+        });
+
+        $('#cmdReturn').click(function () {
+            $('.processing').show();
+            nbxreportget('getreportlist', '#selectparams', '.reportlist');
+            $('#importshow').show();
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').hide();
+            $('#cmdAdd').show();
+            $('.cmdDownload').hide();
+            $('#cmdRun').hide();
+            $('.resultsrow').hide();
+            $('a[[id*="_cmdExport_"]]').hide();
+            $('.importreportdiv').hide();
+            $('.reportlist').show();
+        });
+
+        $('#cmdRun').click(function () {
+            $('.processing').show();
+            $('.resultspane').val('');
+            nbxreportget('runreport', '.reportlist', '.resultspane');
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').show();
+            $('#cmdAdd').hide();
+            $('.resultsrow').show();
+        });
+
+        $('#cmdExport').click(function () {
+            $('.processing').show();
+            $('.resultspane').val('');
+            nbxreportget('exportreport', '.reportlist', '.reportlist');
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').show();
+            $('#cmdAdd').hide();
+            $('.resultsrow').show();
+        });
+
+        $('#importshow').click(function () {
+            $('.importreportdiv').show();
+            $('.reportlist').hide();
+            $('#cmdAdd').hide();
+            $('#cmdReturn').show();
+        });
+
+    });
+
+    $(document).on("nbxgetcompleted", nbxgetCompleted);
+
+    function nbxgetCompleted(e) {
+        $('.processing').hide();
+        // the cmdEdit class does not exists on the orginal html, so it can't bind on load, it has to be done after the ajax has completed.
+        $('.cmdEdit').click(function () {
+            $('.processing').show();
+            $('input[[id*="_itemid_"]]').val($(this).attr('itemid'));
+            nbxreportget('editreport', '#selectparams', '.reportlist');
+            $('#cmdSave').show();
+            $('#cmdDelete').show();
+            $('#cmdReturn').show();
+            $('#cmdAdd').hide();
+            $('a[[id*="_cmdExport_"]]').show();
+            $('.resultsrow').hide();
+            $('#importshow').hide();
+        });
+        $('.cmdSelection').click(function () {
+            $('.processing').show();
+            $('input[[id*="_itemid_"]]').val($(this).attr('itemid'));
+            nbxreportget('reportselection', '#selectparams', '.reportlist');
+            $('#cmdSave').hide();
+            $('#cmdDelete').hide();
+            $('#cmdReturn').show();
+            $('#cmdAdd').hide();
+            $('#cmdRun').show();
+            $('.resultsrow').hide();
+            $('#importshow').hide();
+        });
+
+        if ($('#downloadflag').html() == 'True') {
+            $('.cmdDownload').show();
+            $('input[[id*="_reportfilepath_"]]').val($('#downloadurl').html());
+            $('#downloadflag').html('');
+        }
+        else
+            $('.cmdDownload').hide();
+    }
+
+</script>
+
+<!--css cursor generate report & download-->
+<style>
+    .box-content .fa-cogs:hover {
+        color: #47BE27;
+        cursor: pointer;
+    }
+
+    .box-content .fa-download:hover {
+        color: #47BE27;
+        cursor: pointer;
+    }
+</style>
+
+
 <!-- div section to pass param data to the server side ajax functions -->
 <div id="selectparams">
-    <input id="lang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
-    <input id="editlang" type="hidden" value="" /> <!-- culture code being edited -->
-    <input id="selecteditemid" type="hidden" value="" /> <!-- used as selected edit itemid -->
-    <input id="newitem" type="hidden" value="" /><!-- used to hold "new" token to create new record -->
-    <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
+    <input id="lang" type="hidden" value="@CultureInfo.CurrentCulture"/> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
+    <input id="editlang" type="hidden" value=""/> <!-- culture code being edited -->
+    <input id="selecteditemid" type="hidden" value=""/> <!-- used as selected edit itemid -->
+    <input id="newitem" type="hidden" value=""/><!-- used to hold "new" token to create new record -->
+    <input id="typecode" type="hidden" value="NBSREPORT"/><!-- used as selected edit itemid -->
+    <input id="runreport" type="hidden" value=""/><!--used to generate a report-->
 </div>
 
-<input id="deletemsg" type="hidden" value="@ResourceKey("Admin.deletemsg")"/> <!-- used for prompt on delete -->
+<input id="deletemsg" type="hidden" value="@ResourceKey("Admin.deletemsg")" /> <!-- used for prompt on delete -->
 
 <div id="nbsnotify"></div>
 <div id="loader" class="processing" style="display:none;">@ResourceKey("General.ProcessingDiv")</div>
 
 
-<div id="pageactionssource"><!-- Page actions are moved into header bar - also exist at page bottom-->
-	<div class="col-xs-9 col-sm-9">
-		<a href="#" class="show-sidebar">
-		  <i class="fa fa-bars"></i>
-		</a>
-		<div class="actionbuttonwrapper">
-            <button id="cmdsave" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdSaveButton")</button>
-		    <button id="addnew" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdAddButton")</button>
-		    <button id="cmddelete" type="button" class="btn btn-danger" style="display: none;">@ResourceKey("General.cmdDeleteButton")</button>
-		    <button id="cmdreturn" type="button" class="btn btn-default" style="display: none;">@ResourceKey("General.cmdReturnButton")</button>
-		    <button id="cmdRun" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.runreport")</button>
-		</div>
-	</div>
+<div id="pageactionssource">
+    <!-- Page actions are moved into header bar - also exist at page bottom-->
+    <div class="col-xs-9 col-sm-9">
+        <a href="#" class="show-sidebar">
+            <i class="fa fa-bars"></i>
+        </a>
+        <div class="actionbuttonwrapper">
+            <button id="cmdsave" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdSaveButton")</button>             
+            <button id="addnew" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdAddButton")</button>
+            <button id="cmddelete" type="button" class="btn btn-danger" style="display: none;">@ResourceKey("General.cmdDeleteButton")</button>
+            <button id="cmdreturn" type="button" class="btn btn-default" style="display: none;">@ResourceKey("General.cmdReturnButton")</button>
+            <button id="cmdRun" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("View.runreport")</button>
+        </div>
+    </div>
     <div class="col-xs-3 col-sm-3 top-panel-right">
         @EditCultureSelect("editlanguage", "")
     </div>
