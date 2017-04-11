@@ -20,7 +20,6 @@ using DataProvider = DotNetNuke.Data.DataProvider;
 using DotNetNuke.Entities.Tabs;
 using DotNetNuke.Services.Exceptions;
 using Nevoweb.DNN.NBrightBuy.Components;
-using System.Web;
 
 namespace Nevoweb.DNN.NBrightBuyReport
 {
@@ -29,7 +28,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
     /// </summary>
     public class XmlConnector : IHttpHandler
     {
-        private readonly JavaScriptSerializer _js = new JavaScriptSerializer();
         private String _lang = "";
         private String _itemid = "";
 
@@ -283,7 +281,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var objCtrl = new NBrightBuyController();
             var obj = new NBrightInfo(true);
             obj.TypeCode = "NBSREPORT";
-            obj.SetXmlProperty("genxml/textbox/name", "New Report");
+            obj.SetXmlProperty("genxml/lang/genxml/textbox/name", "New Report");
             obj.PortalId = PortalSettings.Current.PortalId;
             obj.ModuleId = -1;
             obj.ItemID = -1;
@@ -539,7 +537,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         private Boolean CheckRights()
         {
-            if (UserController.GetCurrentUserInfo().IsInRole(StoreSettings.ManagerRole) || UserController.GetCurrentUserInfo().IsInRole("Administrators") || UserController.GetCurrentUserInfo().IsInRole("Editor"))
+            if (UserController.Instance.GetCurrentUserInfo().IsInRole(StoreSettings.ManagerRole) || UserController.Instance.GetCurrentUserInfo().IsInRole("Administrators") || UserController.Instance.GetCurrentUserInfo().IsInRole("Editor"))
             {
                 return true;
             }
@@ -548,13 +546,12 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         private Boolean CheckAdminRights()
         {
-            if (UserController.GetCurrentUserInfo().IsInRole("Administrators"))
+            if (UserController.Instance.GetCurrentUserInfo().IsInRole("Administrators"))
             {
                 return true;
             }
             return false;
         }
-
 
         #endregion
     }

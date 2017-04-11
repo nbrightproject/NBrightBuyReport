@@ -9,27 +9,8 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
-<!-- The basic File Upload plugin -->
-<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>
-<!--The Datepicker plugin-->
-<script type="text/javascript" src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.datepick.xlang.eur.js"></script>
-<script>
-
-    $(function () {
-
-        if (!Modernizr.inputtypes.date) {
-
-            $.datepicker.setDefaults($.datepicker.regional['']);
-            if ("culturecode" == 'en-GB') $.datepicker.setDefaults($.datepicker.regional['en-GB']);
-            if ("culturecode" == 'fr-FR') $.datepicker.setDefaults($.datepicker.regional['fr']);
-            if ("culturecode" == 'nl-NL') $.datepicker.setDefaults($.datepicker.regional['nl']);
-
-            $('input[type=date]').datepicker();
-        }
-
-    });
-
-</script>
+<!-- The basic File Upload plugin 
+<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>-->
 
 @{
     // assign Model, so we can resolve var in VS
