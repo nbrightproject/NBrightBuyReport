@@ -90,7 +90,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             strOut = SaveData(context);
                             break;
                         case "addreport":
-                            strOut = AddReport(context);
+                            AddReport(context);
                             break;
                         case "savereport":
                             strOut = SaveReport(context);
@@ -108,7 +108,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             strOut = ReportSelection(context);
                             break;
                         case "checkadminrights":
-                            strOut = CheckAdminRights(context);
+                            strOut = CheckAdminRights().ToString();
                             break;
                     }
                 }
