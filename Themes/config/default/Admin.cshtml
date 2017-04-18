@@ -41,19 +41,27 @@
 
         $('.processing').show();
 
-        $('a[[id*="_cmdExport_"]]').hide();
+        $('a[id*="_cmdExport_"]').hide();
 
-        nbxreportget('getreportlist', '#selectparams', '.reportlist');
+        NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
 
         $('#cmdAdd').click(function () {
             $('.processing').show();
-            $('.resultsrow').hide();
-            nbxreportget('addreport', '#selectparams', '.reportlist');
+            NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
         });
+
+        $('#addnew').click(function () {
+            $('.processing').show();
+            $('#newitem').val('new');
+            $('#selecteditemid').val('');
+            $('.resultsrow').hide();
+            NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
+        });
+
 
         $('#cmdSave').click(function () {
             $('.processing').show();
-            nbxreportget('savereport', '.reportlist', '.reportlist');
+            NBrightBuyReport_nbxget('savereport', '.reportlist', '.reportlist');
             $('#importshow').show();
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
@@ -62,12 +70,12 @@
             $('.cmdDownload').hide();
             $('#cmdRun').hide();
             $('.resultsrow').hide();
-            $('a[[id*="_cmdExport_"]]').hide();
+            $('a[id*="_cmdExport_"]').hide();
         });
 
         $('#cmdDelete').click(function () {
             $('.processing').show();
-            nbxreportget('deletereport', '.reportlist', '.reportlist');
+            NBrightBuyReport_nbxget('deletereport', '.reportlist', '.reportlist');
             $('#importshow').show();
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
@@ -76,12 +84,12 @@
             $('.cmdDownload').hide();
             $('#cmdRun').hide();
             $('.resultsrow').hide();
-            $('a[[id*="_cmdExport_"]]').hide();
+            $('a[id*="_cmdExport_"]').hide();
         });
 
         $('#cmdReturn').click(function () {
             $('.processing').show();
-            nbxreportget('getreportlist', '#selectparams', '.reportlist');
+            NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
             $('#importshow').show();
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
@@ -90,7 +98,7 @@
             $('.cmdDownload').hide();
             $('#cmdRun').hide();
             $('.resultsrow').hide();
-            $('a[[id*="_cmdExport_"]]').hide();
+            $('a[id*="_cmdExport_"]').hide();
             $('.importreportdiv').hide();
             $('.reportlist').show();
         });
@@ -98,7 +106,7 @@
         $('#cmdRun').click(function () {
             $('.processing').show();
             $('.resultspane').val('');
-            nbxreportget('runreport', '.reportlist', '.resultspane');
+            NBrightBuyReport_nbxget('runreport', '.reportlist', '.resultspane');
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
             $('#cmdReturn').show();
@@ -109,7 +117,7 @@
         $('#cmdExport').click(function () {
             $('.processing').show();
             $('.resultspane').val('');
-            nbxreportget('exportreport', '.reportlist', '.reportlist');
+            NBrightBuyReport_nbxget('exportreport', '.reportlist', '.reportlist');
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
             $('#cmdReturn').show();
@@ -133,20 +141,20 @@
         // the cmdEdit class does not exists on the orginal html, so it can't bind on load, it has to be done after the ajax has completed.
         $('.cmdEdit').click(function () {
             $('.processing').show();
-            $('input[[id*="_itemid_"]]').val($(this).attr('itemid'));
-            nbxreportget('editreport', '#selectparams', '.reportlist');
+            $('input[id*="_itemid_"]').val($(this).attr('itemid'));
+            NBrightBuyReport_nbxget('editreport', '#selectparams', '.reportlist');
             $('#cmdSave').show();
             $('#cmdDelete').show();
             $('#cmdReturn').show();
             $('#cmdAdd').hide();
-            $('a[[id*="_cmdExport_"]]').show();
+            $('a[id*="_cmdExport_"]').show();
             $('.resultsrow').hide();
             $('#importshow').hide();
         });
         $('.cmdSelection').click(function () {
             $('.processing').show();
-            $('input[[id*="_itemid_"]]').val($(this).attr('itemid'));
-            nbxreportget('reportselection', '#selectparams', '.reportlist');
+            $('input[id*="_itemid_"]').val($(this).attr('itemid'));
+            NBrightBuyReport_nbxget('reportselection', '#selectparams', '.reportlist');
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
             $('#cmdReturn').show();
@@ -158,7 +166,7 @@
 
         if ($('#downloadflag').html() == 'True') {
             $('.cmdDownload').show();
-            $('input[[id*="_reportfilepath_"]]').val($('#downloadurl').html());
+            $('input[id*="_reportfilepath_"]').val($('#downloadurl').html());
             $('#downloadflag').html('');
         }
         else
@@ -188,6 +196,7 @@
     <input id="selecteditemid" type="hidden" value=""/> <!-- used as selected edit itemid -->
     <input id="newitem" type="hidden" value=""/><!-- used to hold "new" token to create new record -->
     <input id="typecode" type="hidden" value="NBSREPORT"/><!-- used as selected edit itemid -->
+    <input id="typecodelang" type="hidden" value="NBSREPORTLANG" /><!-- used as selected edit itemid -->
     <input id="runreport" type="hidden" value=""/><!--used to generate a report-->
 </div>
 
@@ -218,4 +227,4 @@
 
 <br />
 
-<div id="editdata"></div>
+<div id="editdata" class="reportlist"></div>

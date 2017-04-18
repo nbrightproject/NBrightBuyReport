@@ -71,9 +71,9 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         case "test":
                             strOut = "<root>" + UserController.Instance.GetCurrentUserInfo().Username + "</root>";
                             break;
-                        case "getdata":
-                            strOut = GetData(context);
-                            break;
+                        //case "getdata":
+                        //    strOut = GetData(context);
+                        //    break;
                         case "addnew":
                             strOut = GetData(context, true);
                             break;
@@ -90,7 +90,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             strOut = SaveData(context);
                             break;
                         case "addreport":
-                            AddReport(context);
+                            strOut = AddReport(context);
                             break;
                         case "savereport":
                             strOut = SaveReport(context);
@@ -177,7 +177,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
             else
             {
                 // Return list of items
-                var l = objCtrl.GetList(PortalSettings.Current.PortalId, Convert.ToInt32(moduleid), typeCode, "", " order by [XMLData].value('(genxml/textbox/validuntil)[1]','nvarchar(50)'), ModifiedDate desc", 0, 0, 0, 0, editlang);
+                var l = objCtrl.GetDataList(PortalSettings.Current.PortalId, Convert.ToInt32(moduleid), typeCode, typeCode + "LANG", Utils.GetCurrentCulture(),""," order by ModifiedDate desc",false, "",100, 0, 0, 0);
                 strOut = NBrightBuyUtils.RazorTemplRenderList(typeCode.ToLower() + "list.cshtml", Convert.ToInt32(moduleid), _lang + editlang, l, templateControl, "config", _lang, StoreSettings.Current.Settings());
             }
 
@@ -276,7 +276,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         #region "Report Methods"
 
-        private void AddReport(HttpContext context)
+        private string AddReport(HttpContext context)
         {
             var objCtrl = new NBrightBuyController();
             var obj = new NBrightInfo(true);
@@ -290,6 +290,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var cachekey = "GetReportListData*" + PortalSettings.Current.PortalId.ToString("");
             Utils.RemoveCache(cachekey);
 
+            return "OK";
         }
 
         private String SaveReport(HttpContext context)
@@ -501,14 +502,17 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var objCtrl = new NBrightBuyController();
 
            // var headerTempl = NBrightBuyUtils.GetTemplateData("listh.html", "", "config", StoreSettings.Current.Settings());
-            var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTlist.cshtml", "", "config", StoreSettings.Current.Settings());
+            //var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTlist.cshtml", "", "config", StoreSettings.Current.Settings());
             //var footerTempl = NBrightBuyUtils.GetTemplateData("listf.html", "", "config", StoreSettings.Current.Settings());
 
             var obj = new NBrightInfo(true);
             //strOut = GenXmlFunctions.RenderRepeater(obj, headerTempl);
 
-            var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "NBSREPORT", "", "", "", "", true);
-            strOut += GenXmlFunctions.RenderRepeater(objList, bodyTempl);
+            var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "NBSREPORT", "NBSREPORTLANG", settings["lang"], "", "", true);
+
+            var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
+
+            strOut = NBrightBuyUtils.RazorTemplRenderList("NBSREPORTlist.cshtml", -1, settings["lang"] + settings["editlang"], objList, templateControl, "config", settings["lang"], StoreSettings.Current.Settings());
 
             //strOut += GenXmlFunctions.RenderRepeater(obj, footerTempl);
 
