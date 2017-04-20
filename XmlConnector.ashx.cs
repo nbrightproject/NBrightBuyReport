@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -22,21 +22,32 @@ using DotNetNuke.Services.Exceptions;
 using Nevoweb.DNN.NBrightBuy.Components;
 
 namespace Nevoweb.DNN.NBrightBuyReport
+
 {
+
     /// <summary>
+
     /// Summary description for XMLconnector
+
     /// </summary>
+
     public class XmlConnector : IHttpHandler
+
     {
         private String _lang = "";
         private String _itemid = "";
 
+
         public void ProcessRequest(HttpContext context)
+
         {
+
             #region "Initialize"
 
             var strOut = "";
+
             try
+
             {
 
                 var moduleid = Utils.RequestQueryStringParam(context, "mid");
@@ -44,7 +55,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 var lang = Utils.RequestQueryStringParam(context, "lang");
                 var language = Utils.RequestQueryStringParam(context, "language");
                 _itemid = Utils.RequestQueryStringParam(context, "itemid");
-
+                
                 #region "setup language"
 
                 // because we are using a webservice the system current thread culture might not be set correctly,
@@ -56,57 +67,73 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 if (_lang == "") _lang = System.Threading.Thread.CurrentThread.CurrentCulture.ToString();
 
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(_lang);
-
+                
                 #endregion
 
                 #endregion
 
-            #region "Do processing of command"
+                #region "Do processing of command"
 
                 strOut = "ERROR!! - No Security rights for current user!";
+
                 if (CheckRights())
+
                 {
                     switch (paramCmd)
+
                     {
                         case "test":
                             strOut = "<root>" + UserController.Instance.GetCurrentUserInfo().Username + "</root>";
                             break;
+
                         //case "getdata":
                         //    strOut = GetData(context);
                         //    break;
+
                         case "addnew":
                             strOut = GetData(context, true);
                             break;
+
                         case "deleterecord":
                             strOut = DeleteData(context);
                             break;
+
                         case "runreport":
                             strOut = RunReport(context);
                             break;
+
                         case "savedata":
                             strOut = SaveData(context);
                             break;
+
                         case "selectlang":
                             strOut = SaveData(context);
                             break;
+
                         case "addreport":
                             strOut = AddReport(context);
                             break;
+
                         case "savereport":
                             strOut = SaveReport(context);
                             break;
+
                         case "deletereport":
                             strOut = DeleteReport(context);
                             break;
+
                         case "getreportlist":
                             strOut = GetReportList(context);
                             break;
+
                         case "editreport":
                             strOut = EditReport(context);
                             break;
+
                         case "reportselection":
                             strOut = ReportSelection(context);
                             break;
+
                         case "checkadminrights":
                             strOut = CheckAdminRights().ToString();
                             break;
@@ -114,15 +141,16 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 }
 
                 #endregion
-
             }
+
             catch (Exception ex)
+
             {
                 strOut = ex.ToString();
                 Exceptions.LogException(ex);
             }
 
-        #region "return results"
+            #region "return results"
 
             //send back xml as plain text
             context.Response.Clear();
@@ -135,29 +163,33 @@ namespace Nevoweb.DNN.NBrightBuyReport
         }
 
         public bool IsReusable
+
         {
             get
+
             {
                 return false;
+
             }
         }
 
         #region "Methods"
 
         private String GetData(HttpContext context, bool clearCache = false)
+
         {
 
             var objCtrl = new NBrightBuyController();
             var strOut = "";
             //get uploaded params
             var ajaxInfo = NBrightBuyUtils.GetAjaxFields(context);
-
             var itemid = ajaxInfo.GetXmlProperty("genxml/hidden/itemid");
             var typeCode = ajaxInfo.GetXmlProperty("genxml/hidden/typecode");
             var newitem = ajaxInfo.GetXmlProperty("genxml/hidden/newitem");
             var selecteditemid = ajaxInfo.GetXmlProperty("genxml/hidden/selecteditemid");
             var moduleid = ajaxInfo.GetXmlProperty("genxml/hidden/moduleid");
             var editlang = ajaxInfo.GetXmlProperty("genxml/hidden/editlang");
+
             if (editlang == "") editlang = _lang;
 
             if (!Utils.IsNumeric(moduleid)) moduleid = "-2"; // use moduleid -2 for razor
@@ -169,24 +201,26 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
 
             if (Utils.IsNumeric(selecteditemid))
+
             {
                 // do edit field data if a itemid has been selected
                 var obj = objCtrl.Get(Convert.ToInt32(selecteditemid), "", editlang);
                 strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang + selecteditemid, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
+
             }
             else
             {
                 // Return list of items
-                var l = objCtrl.GetDataList(PortalSettings.Current.PortalId, Convert.ToInt32(moduleid), typeCode, typeCode + "LANG", Utils.GetCurrentCulture(),""," order by ModifiedDate desc",false, "",100, 0, 0, 0);
+                var l = objCtrl.GetDataList(PortalSettings.Current.PortalId, Convert.ToInt32(moduleid), typeCode, typeCode + "LANG", Utils.GetCurrentCulture(), "", " order by ModifiedDate desc", false, "", 100, 0, 0, 0);
                 strOut = NBrightBuyUtils.RazorTemplRenderList(typeCode.ToLower() + "list.cshtml", Convert.ToInt32(moduleid), _lang + editlang, l, templateControl, "config", _lang, StoreSettings.Current.Settings());
             }
-
             return strOut;
-
         }
 
         private String AddNew(String moduleid, String typeCode)
+
         {
+
             if (!Utils.IsNumeric(moduleid)) moduleid = "-2"; // -2 for razor
 
             var objCtrl = new NBrightBuyController();
@@ -210,24 +244,22 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 nbi2.GUIDKey = "";
                 nbi2.ItemID = objCtrl.Update(nbi2);
             }
-
             NBrightBuyUtils.RemoveModCache(nbi.ModuleId);
 
             return nbi.ItemID.ToString("");
         }
 
         private String SaveData(HttpContext context)
+
         {
             var objCtrl = new NBrightBuyController();
 
             //get uploaded params
             var ajaxInfo = NBrightBuyUtils.GetAjaxFields(context);
-
             var itemid = ajaxInfo.GetXmlProperty("genxml/hidden/itemid");
             var lang = ajaxInfo.GetXmlProperty("genxml/hidden/editlang");
             if (lang == "") lang = ajaxInfo.GetXmlProperty("genxml/hidden/lang");
             if (lang == "") lang = _lang;
-
             if (Utils.IsNumeric(itemid))
             {
                 // get DB record
@@ -235,7 +267,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 if (nbi != null)
                 {
                     var typecode = nbi.TypeCode;
-
                     // get data passed back by ajax
                     var strIn = HttpUtility.UrlDecode(Utils.RequestParam(context, "inputxml"));
                     // update record with ajax data
@@ -249,24 +280,24 @@ namespace Nevoweb.DNN.NBrightBuyReport
                     objCtrl.Update(nbi2);
 
                     DataCache.ClearCache(); // clear ALL cache.
-
                 }
+
             }
             return "";
         }
 
         private String DeleteData(HttpContext context)
+
         {
             var objCtrl = new NBrightBuyController();
-
             //get uploaded params
             var ajaxInfo = NBrightBuyUtils.GetAjaxFields(context);
             var itemid = ajaxInfo.GetXmlProperty("genxml/hidden/itemid");
             if (Utils.IsNumeric(itemid))
+
             {
                 // delete DB record
                 objCtrl.Delete(Convert.ToInt32(itemid));
-
                 NBrightBuyUtils.RemoveModCache(-2);
             }
             return "";
@@ -290,14 +321,16 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var cachekey = "GetReportListData*" + PortalSettings.Current.PortalId.ToString("");
             Utils.RemoveCache(cachekey);
 
-            return "OK";
+            return "";
         }
 
         private String SaveReport(HttpContext context)
+
         {
             var settings = GetAjaxFields(context);
 
             if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
+
             {
                 var strIn = HttpUtility.UrlDecode(Utils.RequestParam(context, "inputxml"));
                 var objCtrl = new NBrightBuyController();
@@ -312,10 +345,10 @@ namespace Nevoweb.DNN.NBrightBuyReport
             }
 
             return "Error!! - Invalid ItemId on SaveReport";
-
         }
 
         private String DeleteReport(HttpContext context)
+
         {
             var settings = GetAjaxFields(context);
 
@@ -331,7 +364,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
             }
 
             return "Error!! - Invalid ItemId on SaveReport";
-
         }
 
         private String GetReportList(HttpContext context)
@@ -339,7 +371,9 @@ namespace Nevoweb.DNN.NBrightBuyReport
             try
             {
                 var settings = GetAjaxFields(context);
+
                 return GetReportListData(settings);
+
             }
             catch (Exception ex)
             {
@@ -389,7 +423,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                     if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
 
                     var objCtrl = new NBrightBuyController();
-                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"])); 
+                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
                     if (obj != null)
                     {
                         var xslTemp = obj.GetXmlProperty("genxml/textbox/templatexsl");
@@ -398,12 +432,9 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         // replace any settings tokens (This is used to place the form data into the SQL)
                         strSql = Utils.ReplaceSettingTokens(strSql, settings);
                         strSql = Utils.ReplaceUrlTokens(strSql);
-
                         strSql = GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
-
                         // add FOR XML if not there, this function will only output XML results.
                         if (!strSql.ToLower().Contains("for xml")) strSql += " FOR XML PATH('item'), ROOT('root')";
-
                         var strXmlResults = objCtrl.GetSqlxml(strSql);
                         if (xslTemp != "")
                         {
@@ -448,18 +479,16 @@ namespace Nevoweb.DNN.NBrightBuyReport
             }
         }
 
-
         private String ReportSelection(HttpContext context)
+
         {
             try
             {
                 var settings = GetAjaxFields(context);
-
                 var strOut = "Error!! - Invalid ItemId on Selection Report";
                 if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
                 {
                     if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
-
                     var objCtrl = new NBrightBuyController();
                     var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
                     if (obj != null)
@@ -471,7 +500,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         bodyTempl = Utils.ReplaceUrlTokens(bodyTempl);
 
                         strOut = GenXmlFunctions.RenderRepeater(obj, bodyTempl);
-
                     }
                 }
 
@@ -487,8 +515,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         #region "functions"
 
-
-
         private String GetReportListData(Dictionary<String, String> settings, bool paging = true)
         {
             var strOut = "";
@@ -496,28 +522,24 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var cacheobj = Utils.GetCache(cachekey);
             if (cacheobj != null) return cacheobj.ToString();
 
-
             if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
-
             var objCtrl = new NBrightBuyController();
 
-           // var headerTempl = NBrightBuyUtils.GetTemplateData("listh.html", "", "config", StoreSettings.Current.Settings());
+            // var headerTempl = NBrightBuyUtils.GetTemplateData("listh.html", "", "config", StoreSettings.Current.Settings());
             //var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTlist.cshtml", "", "config", StoreSettings.Current.Settings());
             //var footerTempl = NBrightBuyUtils.GetTemplateData("listf.html", "", "config", StoreSettings.Current.Settings());
 
             var obj = new NBrightInfo(true);
+
             //strOut = GenXmlFunctions.RenderRepeater(obj, headerTempl);
 
             var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "NBSREPORT", "NBSREPORTLANG", settings["lang"], "", "", true);
-
             var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
-
             strOut = NBrightBuyUtils.RazorTemplRenderList("NBSREPORTlist.cshtml", -1, settings["lang"] + settings["editlang"], objList, templateControl, "config", settings["lang"], StoreSettings.Current.Settings());
 
             //strOut += GenXmlFunctions.RenderRepeater(obj, footerTempl);
 
             Utils.SetCache(cachekey, strOut);
-
             return strOut;
         }
 
@@ -526,14 +548,12 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var strIn = HttpUtility.UrlDecode(Utils.RequestParam(context, "inputxml"));
             var xmlData = GenXmlFunctions.GetGenXmlByAjax(strIn, "");
             var objInfo = new NBrightInfo();
-
             objInfo.ItemID = -1;
             objInfo.TypeCode = "AJAXDATA";
             objInfo.XMLData = xmlData;
             var dic = objInfo.ToDictionary();
             // set langauge if we have it passed.
             if (dic.ContainsKey("lang") && dic["lang"] != "") _lang = dic["lang"];
-
             // set the context  culturecode, so any DNN functions use the correct culture (entryurl tag token)
             if (_lang != "" && _lang != System.Threading.Thread.CurrentThread.CurrentCulture.ToString()) System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo(_lang);
             return dic;
@@ -542,6 +562,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
         private Boolean CheckRights()
         {
             if (UserController.Instance.GetCurrentUserInfo().IsInRole(StoreSettings.ManagerRole) || UserController.Instance.GetCurrentUserInfo().IsInRole("Administrators") || UserController.Instance.GetCurrentUserInfo().IsInRole("Editor"))
+
             {
                 return true;
             }

@@ -55,13 +55,14 @@
             $('#newitem').val('new');
             $('#selecteditemid').val('');
             $('.resultsrow').hide();
-            NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
+            //NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
+            NBrightBuyReport_nbxget('addnew', '#selectparams', '.reportlist');
         });
-
 
         $('#cmdSave').click(function () {
             $('.processing').show();
-            NBrightBuyReport_nbxget('savereport', '.reportlist', '.reportlist');
+            /*NBrightBuyReport_nbxget('savereport', '.reportlist', '.reportlist');*/
+            NBrightBuyReport_nbxget('savedata', '#editdata');
             $('#importshow').show();
             $('#cmdSave').hide();
             $('#cmdDelete').hide();
@@ -72,6 +73,10 @@
             $('.resultsrow').hide();
             $('a[id*="_cmdExport_"]').hide();
         });
+
+            $('.actionbuttonwrapper #cmdsave').click(function () {
+        NBrightBuyReport_nbxget('savedata', '#editdata');
+    });
 
         $('#cmdDelete').click(function () {
             $('.processing').show();
@@ -81,10 +86,10 @@
             $('#cmdDelete').hide();
             $('#cmdReturn').hide();
             $('#cmdAdd').show();
-            $('.cmdDownload').hide();
+            $('.cmdDownload').hide(); 
             $('#cmdRun').hide();
             $('.resultsrow').hide();
-            $('a[id*="_cmdExport_"]').hide();
+            $('a[id*="_cmdExport_"]').hide(); 
         });
 
         $('#cmdReturn').click(function () {
@@ -205,7 +210,6 @@
 <div id="nbsnotify"></div>
 <div id="loader" class="processing" style="display:none;">@ResourceKey("General.ProcessingDiv")</div>
 
-
 <div id="pageactionssource">
     <!-- Page actions are moved into header bar - also exist at page bottom-->
     <div class="col-xs-9 col-sm-9">
@@ -225,6 +229,8 @@
     </div>
 </div>
 
-<br />
+<div id="editdata" class="reportlist"/>
 
-<div id="editdata" class="reportlist"></div>
+<!--<div id="editdata" class="cmdEdit" style="display: none"></div>-->
+
+

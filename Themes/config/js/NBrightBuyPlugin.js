@@ -8,13 +8,13 @@ $(document).ready(function () {
     //NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
     //FIRST CALL TO API DONE IN Admin.cshtml
 
-    /* DONE IN Admin.cshtml
+  /*   DONE IN Admin.cshtml
 
     $('.actionbuttonwrapper #cmdsave').click(function () {
         NBrightBuyReport_nbxget('savedata', '#editdata');
     });
 
-    $('.actionbuttonwrapper #cmdreturn').click(function () {
+   /* $('.actionbuttonwrapper #cmdreturn').click(function () {
         $('#selecteditemid').val(''); // clear sleecteditemid.        
         NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
     });
@@ -31,6 +31,7 @@ $(document).ready(function () {
         $('#selecteditemid').val('');
         NBrightBuyReport_nbxget('addnew', '#selectparams', '#editdata');
     });
+
     */
 
     $('.selecteditlanguage').click(function () {
@@ -173,7 +174,7 @@ function NBrightBuyReport_nbxgetCompleted(e) {
 
     } else {
         //PROCESS LIST
-        NBrightBuyReport_ListButtons();
+      NBrightBuyReport_ListButtons();
         $('.edititem').click(function () {
             $('.processing').show();
             $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
