@@ -30,7 +30,6 @@
 
             $('input[type=date]').datepicker();
         }
-
     });
 
 </script>
@@ -63,7 +62,7 @@
             NBrightBuyReport_nbxget('savedata', '#editdata');
         });
 
-        $('#cmdDelete').click(function () {
+        /*$('#cmdDelete').click(function () {
             $('.processing').show();
             NBrightBuyReport_nbxget('deletereport', '.reportlist', '.reportlist');
             $('#importshow').show();
@@ -75,9 +74,15 @@
             $('#cmdRun').hide();
             $('.resultsrow').hide();
             $('a[id*="_cmdExport_"]').hide(); 
+        });*/
+
+        $('.actionbuttonwrapper #cmddelete').click(function () {
+            if (confirm($('#deletemsg').val())) {
+                NBrightBuyReport_nbxget('deletereport', '.reportlist', '.reportlist');
+            }
         });
 
-        $('#cmdReturn').click(function () {
+       /* $('#cmdReturn').click(function () {
             $('.processing').show();
             NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
             $('#importshow').show();
@@ -91,6 +96,12 @@
             $('a[id*="_cmdExport_"]').hide();
             $('.importreportdiv').hide();
             $('.reportlist').show();
+        });*/
+
+        $('.actionbuttonwrapper #cmdreturn').click(function () {
+            $('#selecteditemid').val(''); // clear sleecteditemid.        
+            NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
+
         });
 
         $('#cmdRun').click(function () {
@@ -119,7 +130,7 @@
             $('.importreportdiv').show();
             $('.reportlist').hide();
             $('#cmdAdd').hide();
-            $('#cmdReturn').show();
+            $('#cmdreturn').show();
         });
 
     });
@@ -168,15 +179,14 @@
             <button id="cmddelete" type="button" class="btn btn-danger" style="display: none;">@ResourceKey("General.cmdDeleteButton")</button>
             <button id="cmdreturn" type="button" class="btn btn-default" style="display: none;">@ResourceKey("General.cmdReturnButton")</button>
             <button id="cmdRun" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("View.runreport")</button>
+            <button id="importshow" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.Import")</button>
         </div>
     </div>
     <div class="col-xs-3 col-sm-3 top-panel-right">
-        @EditCultureSelect("editlanguage", "")
+        @EditCultureSelect("editlanguage", "",false)
     </div>
 </div>
 
 <div id="editdata" class="reportlist"/>
 
 <!--<div id="editdata" class="cmdEdit" style="display: none"></div>-->
-
-
