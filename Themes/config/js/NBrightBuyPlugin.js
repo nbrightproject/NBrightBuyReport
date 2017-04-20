@@ -177,9 +177,10 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         NBrightBuyReport_ListButtons();
         $('.edititem').unbind();
         $('.edititem').click(function () {
-            $('.processing').show();
-            $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
-            NBrightBuyReport_nbxget('editreport', '#selectparams', '#editdata'); // do ajax call to get edit form
+        $('.processing').show();
+        $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
+
+        NBrightBuyReport_nbxget('editreport', '#selectparams', '#editdata'); // do ajax call to get edit form
         });
         $(".catdisplay").prop("disabled", true);
         $(".propdisplay").prop("disabled", true);
