@@ -139,45 +139,6 @@
 
     });
 
-    $(document).on("nbxgetcompleted", nbxgetCompleted);
-
-    function nbxgetCompleted(e) {
-        $('.processing').hide();
-        // the cmdEdit class does not exists on the orginal html, so it can't bind on load, it has to be done after the ajax has completed.
-        $('.cmdEdit').click(function () {
-            $('.processing').show();
-            $('input[id*="_itemid_"]').val($(this).attr('itemid'));
-            NBrightBuyReport_nbxget('editreport', '#selectparams', '.reportlist');
-            $('#cmdSave').show();
-            $('#cmdDelete').show();
-            $('#cmdReturn').show();
-            $('#cmdAdd').hide();
-            $('a[id*="_cmdExport_"]').show();
-            $('.resultsrow').hide();
-            $('#importshow').hide();
-        });
-        $('.cmdSelection').click(function () {
-            $('.processing').show();
-            $('input[id*="_itemid_"]').val($(this).attr('itemid'));
-            NBrightBuyReport_nbxget('reportselection', '#selectparams', '.reportlist');
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').show();
-            $('#cmdAdd').hide();
-            $('#cmdRun').show();
-            $('.resultsrow').hide();
-            $('#importshow').hide();
-        });
-
-        if ($('#downloadflag').html() == 'True') {
-            $('.cmdDownload').show();
-            $('input[id*="_reportfilepath_"]').val($('#downloadurl').html());
-            $('#downloadflag').html('');
-        }
-        else
-            $('.cmdDownload').hide();
-    }
-
 </script>
 
 <!--css cursor generate report & download-->
