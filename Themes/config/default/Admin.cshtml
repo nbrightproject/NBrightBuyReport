@@ -59,24 +59,9 @@
             NBrightBuyReport_nbxget('addnew', '#selectparams', '.reportlist');
         });
 
-        $('#cmdSave').click(function () {
-            $('.processing').show();
-            /*NBrightBuyReport_nbxget('savereport', '.reportlist', '.reportlist');*/
+        $('.actionbuttonwrapper #cmdsave').click(function () {
             NBrightBuyReport_nbxget('savedata', '#editdata');
-            $('#importshow').show();
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').hide();
-            $('#cmdAdd').show();
-            $('.cmdDownload').hide();
-            $('#cmdRun').hide();
-            $('.resultsrow').hide();
-            $('a[id*="_cmdExport_"]').hide();
         });
-
-            $('.actionbuttonwrapper #cmdsave').click(function () {
-        NBrightBuyReport_nbxget('savedata', '#editdata');
-    });
 
         $('#cmdDelete').click(function () {
             $('.processing').show();

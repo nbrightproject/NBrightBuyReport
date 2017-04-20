@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -388,18 +388,14 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 var settings = GetAjaxFields(context);
 
                 var strOut = "Error!! - Invalid ItemId on Edit Report";
-                if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
+                if (settings.ContainsKey("selecteditemid") && Utils.IsNumeric(settings["selecteditemid"]))
                 {
-                    if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
-
+                    var editlang = settings["editlang"];
+                    if (editlang == "") editlang = _lang;
                     var objCtrl = new NBrightBuyController();
-                    var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTfields.html", "", "config", StoreSettings.Current.Settings());
 
-                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
-                    if (obj != null)
-                    {
-                        strOut = GenXmlFunctions.RenderRepeater(obj, bodyTempl);
-                    }
+                    var obj = objCtrl.Get(Convert.ToInt32(settings["selecteditemid"]), "", editlang);
+                    strOut = NBrightBuyUtils.RazorTemplRender("NBSREPORTfields.cshtml", -1, _lang + editlang + settings["selecteditemid"], obj, "/DesktopModules/NBright/NBrightBuyReport", "config", _lang, StoreSettings.Current.Settings());
                 }
 
                 return strOut;
