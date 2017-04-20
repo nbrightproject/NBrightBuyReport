@@ -107,7 +107,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             break;
 
                         case "selectlang":
-                            strOut = SaveData(context);
+                            strOut = SelectLang(context);
                             break;
 
                         case "addreport":
@@ -115,7 +115,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             break;
 
                         case "savereport":
-                            strOut = SaveReport(context);
+                            strOut = SaveData(context);
                             break;
 
                         case "deletereport":
@@ -123,11 +123,11 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             break;
 
                         case "getreportlist":
-                            strOut = GetReportList(context);
+                            strOut = GetData(context);
                             break;
 
                         case "editreport":
-                            strOut = EditReport(context);
+                            strOut = GetData(context);
                             break;
 
                         case "reportselection":
@@ -190,22 +190,23 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var moduleid = ajaxInfo.GetXmlProperty("genxml/hidden/moduleid");
             var editlang = ajaxInfo.GetXmlProperty("genxml/hidden/editlang");
 
+            if (itemid == "") itemid = selecteditemid;
+
             if (editlang == "") editlang = _lang;
 
             if (!Utils.IsNumeric(moduleid)) moduleid = "-2"; // use moduleid -2 for razor
 
             if (clearCache) NBrightBuyUtils.RemoveModCache(Convert.ToInt32(moduleid));
 
-            if (newitem == "new") selecteditemid = AddNew(moduleid, typeCode);
+            if (newitem == "new") itemid = AddNew(moduleid, typeCode);
 
             var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
 
-            if (Utils.IsNumeric(selecteditemid))
-
+            if (Utils.IsNumeric(itemid))
             {
                 // do edit field data if a itemid has been selected
-                var obj = objCtrl.Get(Convert.ToInt32(selecteditemid), "", editlang);
-                strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang + selecteditemid, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
+                var obj = objCtrl.Get(Convert.ToInt32(itemid), "", editlang);
+                strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
 
             }
             else
@@ -286,6 +287,13 @@ namespace Nevoweb.DNN.NBrightBuyReport
             return "";
         }
 
+        private String SelectLang(HttpContext context)
+        {
+            SaveData(context);
+            return GetData(context);
+        }
+
+
         private String DeleteData(HttpContext context)
 
         {
@@ -324,29 +332,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
             return "";
         }
 
-        private String SaveReport(HttpContext context)
-
-        {
-            var settings = GetAjaxFields(context);
-
-            if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
-
-            {
-                var strIn = HttpUtility.UrlDecode(Utils.RequestParam(context, "inputxml"));
-                var objCtrl = new NBrightBuyController();
-                var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
-                obj.UpdateAjax(strIn);
-                objCtrl.Update(obj);
-
-                var cachekey = "GetReportListData*" + PortalSettings.Current.PortalId.ToString("");
-                Utils.RemoveCache(cachekey);
-
-                return GetReportListData(settings);
-            }
-
-            return "Error!! - Invalid ItemId on SaveReport";
-        }
-
         private String DeleteReport(HttpContext context)
 
         {
@@ -360,50 +345,10 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 var cachekey = "GetReportListData*" + PortalSettings.Current.PortalId.ToString("");
                 Utils.RemoveCache(cachekey);
 
-                return GetReportListData(settings);
+                return GetData(context);
             }
 
             return "Error!! - Invalid ItemId on SaveReport";
-        }
-
-        private String GetReportList(HttpContext context)
-        {
-            try
-            {
-                var settings = GetAjaxFields(context);
-
-                return GetReportListData(settings);
-
-            }
-            catch (Exception ex)
-            {
-                return ex.ToString();
-            }
-        }
-
-        private String EditReport(HttpContext context)
-        {
-            try
-            {
-                var settings = GetAjaxFields(context);
-
-                var strOut = "Error!! - Invalid ItemId on Edit Report";
-                if (settings.ContainsKey("selecteditemid") && Utils.IsNumeric(settings["selecteditemid"]))
-                {
-                    var editlang = settings["editlang"];
-                    if (editlang == "") editlang = _lang;
-                    var objCtrl = new NBrightBuyController();
-
-                    var obj = objCtrl.Get(Convert.ToInt32(settings["selecteditemid"]), "", editlang);
-                    strOut = NBrightBuyUtils.RazorTemplRender("NBSREPORTfields.cshtml", -1, _lang + editlang + settings["selecteditemid"], obj, "/DesktopModules/NBright/NBrightBuyReport", "config", _lang, StoreSettings.Current.Settings());
-                }
-
-                return strOut;
-            }
-            catch (Exception ex)
-            {
-                return ex.ToString();
-            }
         }
 
         private String RunReport(HttpContext context)
@@ -510,34 +455,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
         #endregion
 
         #region "functions"
-
-        private String GetReportListData(Dictionary<String, String> settings, bool paging = true)
-        {
-            var strOut = "";
-            var cachekey = "GetReportListData*" + PortalSettings.Current.PortalId.ToString("");
-            var cacheobj = Utils.GetCache(cachekey);
-            if (cacheobj != null) return cacheobj.ToString();
-
-            if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
-            var objCtrl = new NBrightBuyController();
-
-            // var headerTempl = NBrightBuyUtils.GetTemplateData("listh.html", "", "config", StoreSettings.Current.Settings());
-            //var bodyTempl = NBrightBuyUtils.GetTemplateData("NBSREPORTlist.cshtml", "", "config", StoreSettings.Current.Settings());
-            //var footerTempl = NBrightBuyUtils.GetTemplateData("listf.html", "", "config", StoreSettings.Current.Settings());
-
-            var obj = new NBrightInfo(true);
-
-            //strOut = GenXmlFunctions.RenderRepeater(obj, headerTempl);
-
-            var objList = objCtrl.GetDataList(PortalSettings.Current.PortalId, -1, "NBSREPORT", "NBSREPORTLANG", settings["lang"], "", "", true);
-            var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
-            strOut = NBrightBuyUtils.RazorTemplRenderList("NBSREPORTlist.cshtml", -1, settings["lang"] + settings["editlang"], objList, templateControl, "config", settings["lang"], StoreSettings.Current.Settings());
-
-            //strOut += GenXmlFunctions.RenderRepeater(obj, footerTempl);
-
-            Utils.SetCache(cachekey, strOut);
-            return strOut;
-        }
 
         private Dictionary<String, String> GetAjaxFields(HttpContext context)
         {

@@ -34,109 +34,6 @@
 
 </script>
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-
-        $('.processing').show();
-
-        $('a[id*="_cmdExport_"]').hide();
-
-        NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
-
-        $('#cmdAdd').click(function () {
-            $('.processing').show();
-            NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
-        });
-
-        $('#addnew').click(function () {
-            $('.processing').show();
-            $('#newitem').val('new');
-            $('#selecteditemid').val('');
-            $('.resultsrow').hide();
-            //NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
-            NBrightBuyReport_nbxget('addnew', '#selectparams', '.reportlist');
-        });
-
-        $('.actionbuttonwrapper #cmdsave').click(function () {
-            NBrightBuyReport_nbxget('savedata', '#editdata');
-        });
-
-        /*$('#cmdDelete').click(function () {
-            $('.processing').show();
-            NBrightBuyReport_nbxget('deletereport', '.reportlist', '.reportlist');
-            $('#importshow').show();
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').hide();
-            $('#cmdAdd').show();
-            $('.cmdDownload').hide(); 
-            $('#cmdRun').hide();
-            $('.resultsrow').hide();
-            $('a[id*="_cmdExport_"]').hide(); 
-        });*/
-
-        $('.actionbuttonwrapper #cmddelete').click(function () {
-            if (confirm($('#deletemsg').val())) {
-                NBrightBuyReport_nbxget('deletereport', '.reportlist', '.reportlist');
-            }
-        });
-
-       /* $('#cmdReturn').click(function () {
-            $('.processing').show();
-            NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
-            $('#importshow').show();
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').hide();
-            $('#cmdAdd').show();
-            $('.cmdDownload').hide();
-            $('#cmdRun').hide();
-            $('.resultsrow').hide();
-            $('a[id*="_cmdExport_"]').hide();
-            $('.importreportdiv').hide();
-            $('.reportlist').show();
-        });*/
-
-        $('.actionbuttonwrapper #cmdreturn').click(function () {
-            $('#selecteditemid').val(''); // clear sleecteditemid.        
-            NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
-
-        });
-
-        $('#cmdRun').click(function () {
-            $('.processing').show();
-            $('.resultspane').val('');
-            NBrightBuyReport_nbxget('runreport', '.reportlist', '.resultspane');
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').show();
-            $('#cmdAdd').hide();
-            $('.resultsrow').show();
-        });
-
-        $('#cmdExport').click(function () {
-            $('.processing').show();
-            $('.resultspane').val('');
-            NBrightBuyReport_nbxget('exportreport', '.reportlist', '.reportlist');
-            $('#cmdSave').hide();
-            $('#cmdDelete').hide();
-            $('#cmdReturn').show();
-            $('#cmdAdd').hide();
-            $('.resultsrow').show();
-        });
-
-        $('#importshow').click(function () {
-            $('.importreportdiv').show();
-            $('.reportlist').hide();
-            $('#cmdAdd').hide();
-            $('#cmdreturn').show();
-        });
-
-    });
-
-</script>
-
 <!--css cursor generate report & download-->
 <style>
     .box-content .fa-cogs:hover {
@@ -154,7 +51,6 @@
 <!-- div section to pass param data to the server side ajax functions -->
 <div id="selectparams">
     <input id="lang" type="hidden" value="@CultureInfo.CurrentCulture"/> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
-    <input id="editlang" type="hidden" value=""/> <!-- culture code being edited -->
     <input id="selecteditemid" type="hidden" value=""/> <!-- used as selected edit itemid -->
     <input id="newitem" type="hidden" value=""/><!-- used to hold "new" token to create new record -->
     <input id="typecode" type="hidden" value="NBSREPORT"/><!-- used as selected edit itemid -->

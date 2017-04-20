@@ -1,5 +1,72 @@
 ﻿
+
 $(document).ready(function () {
+
+    $('.processing').show();
+
+    $('a[id*="_cmdExport_"]').hide();
+
+    NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
+
+    $('#cmdAdd').click(function () {
+        $('.processing').show();
+        NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
+    });
+
+    $('#addnew').click(function () {
+        $('.processing').show();
+        $('#newitem').val('new');
+        $('#selecteditemid').val('');
+        $('.resultsrow').hide();
+        //NBrightBuyReport_nbxget('addreport', '#selectparams', '.reportlist');
+        NBrightBuyReport_nbxget('addnew', '#selectparams', '.reportlist');
+    });
+
+    $('.actionbuttonwrapper #cmdsave').click(function () {
+        NBrightBuyReport_nbxget('savedata', '#editdata');
+    });
+
+    $('.actionbuttonwrapper #cmddelete').click(function () {
+        if (confirm($('#deletemsg').val())) {
+            NBrightBuyReport_nbxget('deletereport', '.reportlist', '.reportlist');
+        }
+    });
+
+    $('.actionbuttonwrapper #cmdreturn').click(function () {
+        $('#selecteditemid').val(''); // clear sleecteditemid.        
+        NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
+
+    });
+
+    $('#cmdRun').click(function () {
+        $('.processing').show();
+        $('.resultspane').val('');
+        NBrightBuyReport_nbxget('runreport', '.reportlist', '.resultspane');
+        $('#cmdSave').hide();
+        $('#cmdDelete').hide();
+        $('#cmdReturn').show();
+        $('#cmdAdd').hide();
+        $('.resultsrow').show();
+    });
+
+    $('#cmdExport').click(function () {
+        $('.processing').show();
+        $('.resultspane').val('');
+        NBrightBuyReport_nbxget('exportreport', '.reportlist', '.reportlist');
+        $('#cmdSave').hide();
+        $('#cmdDelete').hide();
+        $('#cmdReturn').show();
+        $('#cmdAdd').hide();
+        $('.resultsrow').show();
+    });
+
+    $('#importshow').click(function () {
+        $('.importreportdiv').show();
+        $('.reportlist').hide();
+        $('#cmdAdd').hide();
+        $('#cmdreturn').show();
+    });
+
 
     // set the default edit language to the current langauge
     $('#editlang').val($('#selectparams #lang').val());
@@ -36,7 +103,7 @@ $(document).ready(function () {
 
     $('.selecteditlanguage').click(function () {
         $('#editlang').val($(this).attr('lang')); // alter lang after, so we get correct data record
-        NBrightBuyReport_nbxget('selectlang', '#editdata'); // do ajax call to save current edit form
+        NBrightBuyReport_nbxget('selectlang', '#selectparams','#editdata'); // do ajax call to save current edit form
     });
 
 
@@ -109,13 +176,6 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         $('#selecteditemid').val(''); // clear sleecteditemid.        
         //NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');// relist after save
         NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
-    }
-
-    if (e.cmd == 'selectlang') {
-        //$('#selecteditemid').val(''); // clear sleecteditemid.        
-        //NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata'); // do ajax call to get edit form
-        //NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
-        NBrightBuyReport_nbxget('savedata', '#editdata');
     }
 
     // check if we are displaying a list or the detail and do processing.
