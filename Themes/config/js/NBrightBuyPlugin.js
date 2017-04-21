@@ -100,10 +100,9 @@ $(document).ready(function () {
     });
 
     */
-
     $('.selecteditlanguage').click(function () {
-        $('#editlang').val($(this).attr('lang')); // alter lang after, so we get correct data record
-        NBrightBuyReport_nbxget('selectlang', '#selectparams','#editdata'); // do ajax call to save current edit form
+        $('#selectlang').val($(this).attr('lang')); // alter lang after, so we get correct data record
+        NBrightBuyReport_nbxget('selectlang', '#editdata', '#editdata'); // do ajax call to save current edit form
     });
 
 
@@ -158,6 +157,8 @@ function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, append
 
 
 function NBrightBuyReport_nbxgetCompleted(e) {
+
+    $('#selectlang').val("");
 
     if (e.cmd == 'addnew') {
         $('#newitem').val(''); // clear item so if new was just created we don;t create another record

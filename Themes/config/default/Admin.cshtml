@@ -50,11 +50,10 @@
 
 <!-- div section to pass param data to the server side ajax functions -->
 <div id="selectparams">
-    <input id="lang" type="hidden" value="@CultureInfo.CurrentCulture"/> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
+    <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture"/> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
     <input id="selecteditemid" type="hidden" value=""/> <!-- used as selected edit itemid -->
     <input id="newitem" type="hidden" value=""/><!-- used to hold "new" token to create new record -->
     <input id="typecode" type="hidden" value="NBSREPORT"/><!-- used as selected edit itemid -->
-    <input id="typecodelang" type="hidden" value="NBSREPORTLANG" /><!-- used as selected edit itemid -->
     <input id="runreport" type="hidden" value=""/><!--used to generate a report-->
 </div>
 
@@ -83,6 +82,6 @@
     </div>
 </div>
 
-<div id="editdata" class="reportlist"/>
+<div id="editdata" class="reportlist"></div>
 
 <!--<div id="editdata" class="cmdEdit" style="display: none"></div>-->

@@ -42,36 +42,13 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         {
 
-            #region "Initialize"
-
             var strOut = "";
-
             try
-
             {
-
-                var moduleid = Utils.RequestQueryStringParam(context, "mid");
                 var paramCmd = Utils.RequestQueryStringParam(context, "cmd");
-                var lang = Utils.RequestQueryStringParam(context, "lang");
-                var language = Utils.RequestQueryStringParam(context, "language");
                 _itemid = Utils.RequestQueryStringParam(context, "itemid");
-                
-                #region "setup language"
-
-                // because we are using a webservice the system current thread culture might not be set correctly,
-                //  so use the lang/language param to set it.
-                if (lang == "") lang = language;
-                if (!string.IsNullOrEmpty(lang)) _lang = lang;
-
-                // default to current thread if we have no language.
-                if (_lang == "") _lang = System.Threading.Thread.CurrentThread.CurrentCulture.ToString();
-
-                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture(_lang);
-                
-                #endregion
-
-                #endregion
-
+                NBrightBuyUtils.SetContextLangauge(context);
+                _lang = System.Threading.Thread.CurrentThread.CurrentCulture.ToString();
                 #region "Do processing of command"
 
                 strOut = "ERROR!! - No Security rights for current user!";
@@ -80,7 +57,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
                 {
                     switch (paramCmd)
-
                     {
                         case "test":
                             strOut = "<root>" + UserController.Instance.GetCurrentUserInfo().Username + "</root>";
@@ -189,6 +165,9 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var selecteditemid = ajaxInfo.GetXmlProperty("genxml/hidden/selecteditemid");
             var moduleid = ajaxInfo.GetXmlProperty("genxml/hidden/moduleid");
             var editlang = ajaxInfo.GetXmlProperty("genxml/hidden/editlang");
+            var selectlang = ajaxInfo.GetXmlProperty("genxml/hidden/selectlang");
+
+            if (selectlang != "") editlang = selectlang;
 
             if (itemid == "") itemid = selecteditemid;
 
@@ -251,7 +230,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
         }
 
         private String SaveData(HttpContext context)
-
         {
             var objCtrl = new NBrightBuyController();
 
@@ -465,10 +443,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
             objInfo.TypeCode = "AJAXDATA";
             objInfo.XMLData = xmlData;
             var dic = objInfo.ToDictionary();
-            // set langauge if we have it passed.
-            if (dic.ContainsKey("lang") && dic["lang"] != "") _lang = dic["lang"];
-            // set the context  culturecode, so any DNN functions use the correct culture (entryurl tag token)
-            if (_lang != "" && _lang != System.Threading.Thread.CurrentThread.CurrentCulture.ToString()) System.Threading.Thread.CurrentThread.CurrentCulture = new CultureInfo(_lang);
             return dic;
         }
 
