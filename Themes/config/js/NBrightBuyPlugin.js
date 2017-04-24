@@ -73,45 +73,42 @@
     //NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
     //FIRST CALL TO API DONE IN Admin.cshtml
 
-  /*   DONE IN Admin.cshtml
-
-    $('.actionbuttonwrapper #cmdsave').click(function () {
-        NBrightBuyReport_nbxget('savedata', '#editdata');
-    });
-
-   /* $('.actionbuttonwrapper #cmdreturn').click(function () {
-        $('#selecteditemid').val(''); // clear sleecteditemid.        
-        NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
-    });
-
-    $('.actionbuttonwrapper #cmddelete').click(function () {
-        if (confirm($('#deletemsg').val())) {
-            NBrightBuyReport_nbxget('deleterecord', '#editdata');
-        }
-    });
-
-    $('#addnew').click(function () {
-        $('.processing').show();
-        $('#newitem').val('new');
-        $('#selecteditemid').val('');
-        NBrightBuyReport_nbxget('addnew', '#selectparams', '#editdata');
-    });
-
-    */
+    /*   DONE IN Admin.cshtml
+  
+      $('.actionbuttonwrapper #cmdsave').click(function () {
+          NBrightBuyReport_nbxget('savedata', '#editdata');
+      });
+  
+     /* $('.actionbuttonwrapper #cmdreturn').click(function () {
+          $('#selecteditemid').val(''); // clear sleecteditemid.        
+          NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
+      });
+  
+      $('.actionbuttonwrapper #cmddelete').click(function () {
+          if (confirm($('#deletemsg').val())) {
+              NBrightBuyReport_nbxget('deleterecord', '#editdata');
+          }
+      });
+  
+      $('#addnew').click(function () {
+          $('.processing').show();
+          $('#newitem').val('new');
+          $('#selecteditemid').val('');
+          NBrightBuyReport_nbxget('addnew', '#selectparams', '#editdata');
+      });
+  
+      */
     $('.selecteditlanguage').click(function () {
         $('#selectlang').val($(this).attr('lang')); // alter lang after, so we get correct data record
         NBrightBuyReport_nbxget('selectlang', '#editdata', '#editdata'); // do ajax call to save current edit form
     });
-
-
 });
 
-$(document).on("NBrightBuyReport_nbxgetcompleted", NBrightBuyReport_nbxgetCompleted); // assign a completed event for the ajax calls
+$(document).on("NBrightBuyReport_nbxgetcompleted", NBrightBuyReport_nbxgetCompleted);// assign a completed event for the ajax calls
 
 
 function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, appendreturn) {
     $('.processing').show();
-
     $.ajaxSetup({ cache: false });
 
     var cmdupdate = '/DesktopModules/NBright/NBrightBuyReport/XmlConnector.ashx?cmd=' + cmd;
@@ -143,7 +140,7 @@ function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, append
             });
         }
         //if (cmd == 'getdata' || cmd == 'getreportlist') { // only hide on getdata
-            $('.processing').hide();
+        $('.processing').hide();
         //}
     });
 
@@ -155,6 +152,19 @@ function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, append
 
 
 function NBrightBuyReport_nbxgetCompleted(e) {
+
+    $('.cmdSelection').click(function () {
+        $('.processing').show();
+        $('input[id*="_itemid_"]').val($(this).attr('itemid'));
+        nbxreportget('getreportlist', '#selectparams', '.reportlist');
+        $('#cmdSave').hide();
+        $('#cmdDelete').hide();
+        $('#cmdReturn').show();
+        $('#cmdAdd').hide();
+        $('#cmdRun').show();
+        $('.resultsrow').hide();
+        $('#importshow').hide();
+    });
 
     $('#selectlang').val("");
 
@@ -188,7 +198,7 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         } else {
             $('.catdisplay').hide();
             $('.propdisplay').show();
-        }
+            }
 
         $('input:radio[name=typeselectradio]').change(function () {
             if ($(this).val() == 'cat') {
@@ -237,7 +247,8 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         //PROCESS LIST
         NBrightBuyReport_ListButtons();
         $('.edititem').unbind();
-        $('.edititem').click(function () {
+        $('.edititem').click
+        (function () {
             $('.processing').show();
             $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
             NBrightBuyReport_nbxget('editreport', '#selectparams', '#editdata'); // do ajax call to get edit form
@@ -253,6 +264,7 @@ function NBrightBuyReport_DetailButtons() {
     $('#cmdreturn').show();
     $('#addnew').hide();
     $('input[datatype="date"]').datepicker(); // assign datepicker to any ajax loaded fields
+    $(".selecteditlanguage").show();
 }
 
 function NBrightBuyReport_ListButtons() {
@@ -260,7 +272,7 @@ function NBrightBuyReport_ListButtons() {
     $('#cmddelete').hide();
     $('#cmdreturn').hide();
     $('#addnew').show();
-    $(".selecteditlanguage").hide();
+    $(".selecteditlanguage").hide();//hide flags in list and report_detail
 }
 
 
