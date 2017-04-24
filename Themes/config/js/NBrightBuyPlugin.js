@@ -1,6 +1,4 @@
-﻿
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 
     $('.processing').show();
 
@@ -262,6 +260,7 @@ function NBrightBuyReport_ListButtons() {
     $('#cmddelete').hide();
     $('#cmdreturn').hide();
     $('#addnew').show();
+    $(".selecteditlanguage").hide();
 }
 
 

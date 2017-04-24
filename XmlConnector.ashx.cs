@@ -24,11 +24,8 @@ using Nevoweb.DNN.NBrightBuy.Components;
 namespace Nevoweb.DNN.NBrightBuyReport
 
 {
-
     /// <summary>
-
     /// Summary description for XMLconnector
-
     /// </summary>
 
     public class XmlConnector : IHttpHandler
@@ -37,11 +34,9 @@ namespace Nevoweb.DNN.NBrightBuyReport
         private String _lang = "";
         private String _itemid = "";
 
-
         public void ProcessRequest(HttpContext context)
 
         {
-
             var strOut = "";
             try
             {
@@ -49,6 +44,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 _itemid = Utils.RequestQueryStringParam(context, "itemid");
                 NBrightBuyUtils.SetContextLangauge(context);
                 _lang = System.Threading.Thread.CurrentThread.CurrentCulture.ToString();
+
                 #region "Do processing of command"
 
                 strOut = "ERROR!! - No Security rights for current user!";
