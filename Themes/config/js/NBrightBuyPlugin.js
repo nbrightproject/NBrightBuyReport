@@ -149,14 +149,13 @@ function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, append
     });
 }
 
-
-
 function NBrightBuyReport_nbxgetCompleted(e) {
-
-    $('.cmdSelection').click(function () {
+    $('.cmdSelection').unbind();
+    $('.cmdSelection').click
+        (function () {
         $('.processing').show();
         $('input[id*="_itemid_"]').val($(this).attr('itemid'));
-        nbxreportget('getreportlist', '#selectparams', '.reportlist');
+        nbxreportget('.runreport', '#selectparams', '.reportlist');
         $('#cmdSave').hide();
         $('#cmdDelete').hide();
         $('#cmdReturn').show();
@@ -164,7 +163,7 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         $('#cmdRun').show();
         $('.resultsrow').hide();
         $('#importshow').hide();
-    });
+        });
 
     $('#selectlang').val("");
 

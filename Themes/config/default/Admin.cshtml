@@ -15,25 +15,6 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
-<!--The Datepicker plugin-->
-<script type="text/javascript" src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.datepick.xlang.eur.js"></script>
-<script>
-
-    $(function () {
-
-        if (!Modernizr.inputtypes.date) {
-
-            $.datepicker.setDefaults($.datepicker.regional['']);
-            if ("culturecode" == 'en-GB') $.datepicker.setDefaults($.datepicker.regional['en-GB']);
-            if ("culturecode" == 'fr-FR') $.datepicker.setDefaults($.datepicker.regional['fr']);
-            if ("culturecode" == 'nl-NL') $.datepicker.setDefaults($.datepicker.regional['nl']);
-
-            $('input[type=date]').datepicker();
-        }
-    });
-
-</script>
-
 <!--css cursor generate report & download-->
 <style>
     .box-content .fa-cogs:hover {
@@ -46,7 +27,6 @@
         cursor: pointer;
     }
 </style>
-
 
 <!-- div section to pass param data to the server side ajax functions -->
 <div id="selectparams">
@@ -83,5 +63,6 @@
 </div>
 
 <div id="editdata" class="reportlist"></div>
+
 
 <!--<div id="editdata" class="cmdEdit" style="display: none"></div>-->

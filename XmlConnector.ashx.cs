@@ -363,7 +363,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                                 var relfilename = StoreSettings.Current.FolderTemp + "/reportdownload" + k + "." + extension.Trim('.');
                                 if (!settings.ContainsKey("filename")) settings.Add("filename", filename);
                                 Utils.SaveFile(filename, strReportResults);
-                                strOut = NBrightBuyUtils.GetTemplateData("download.html", "", "config", settings);
+                                strOut = NBrightBuyUtils.GetTemplateData("Admin.cshtml", "", "config", settings);
                             }
                             strOut += "<br/>";
                             if (obj.GetXmlPropertyBool("genxml/checkbox/inline"))
@@ -408,7 +408,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                     var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
                     if (obj != null)
                     {
-                        var bodyTempl = NBrightBuyUtils.GetTemplateData("selection.html", "", "config", StoreSettings.Current.Settings());
+                        var bodyTempl = NBrightBuyUtils.GetTemplateData("Admin.cshtml", "", "config", StoreSettings.Current.Settings());
                         var strTempl = obj.GetXmlProperty("genxml/textbox/selectiondetails");
                         bodyTempl = bodyTempl.Replace("[Template:selectiondetails]", strTempl);
                         bodyTempl = Utils.ReplaceSettingTokens(bodyTempl, settings);
