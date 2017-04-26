@@ -263,7 +263,7 @@ function NBrightBuyReport_DetailButtons() {
     $('#cmdreturn').show();
     $('#addnew').hide();
     $('input[datatype="date"]').datepicker(); // assign datepicker to any ajax loaded fields
-    $(".selecteditlanguage").show();
+    $(".selecteditlanguage").show();//show lang flags in report detail
 }
 
 function NBrightBuyReport_ListButtons() {
@@ -271,7 +271,7 @@ function NBrightBuyReport_ListButtons() {
     $('#cmddelete').hide();
     $('#cmdreturn').hide();
     $('#addnew').show();
-    $(".selecteditlanguage").hide();//hide flags in list and report_detail
+    $(".selecteditlanguage").hide();//hide lang flags in list
 }
 
 
