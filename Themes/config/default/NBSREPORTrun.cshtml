@@ -30,13 +30,19 @@
     @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
 </div>
 
-<!--Ref report -->
+<!--SQL textbox-->
+
+<div class="col-sm-12">
+    <label>@ResourceKey("Admin.sql")</label>
+    @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
+</div>
+
 
 <h4>RUN</h4>
 
-
 <div class="actionbuttonwrapper">
     <button id="runreport" type="button" class="btn btn-primary">@ResourceKey("View.runreport")</button>
+    <button id="runSQL" type="button" class="btn btn-primary" title="Run SQL query">@ResourceKey("View.runSQL")</button>
 </div>
 
 

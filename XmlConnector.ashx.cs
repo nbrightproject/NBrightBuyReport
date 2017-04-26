@@ -24,16 +24,12 @@ using Nevoweb.DNN.NBrightBuy.Components;
 namespace Nevoweb.DNN.NBrightBuyReport
 
 {
-    /// <summary>
-    /// Summary description for XMLconnector
-    /// </summary>
-
     public class XmlConnector : IHttpHandler
 
     {
         private String _lang = "";
         private String _itemid = "";
-
+        
         public void ProcessRequest(HttpContext context)
 
         {
@@ -58,10 +54,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             strOut = "<root>" + UserController.Instance.GetCurrentUserInfo().Username + "</root>";
                             break;
 
-                        //case "getdata":
-                        //    strOut = GetData(context);
-                        //    break;
-
                         case "addnew":
                             strOut = GetData(context, true);
                             break;
@@ -71,6 +63,10 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             break;
 
                         case "runreport":
+                            strOut = RunReport(context);
+                            break;
+
+                        case "runSQL":
                             strOut = RunReport(context);
                             break;
 
@@ -194,8 +190,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 {
                     strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
                 }
-
-
             }
             else
             {

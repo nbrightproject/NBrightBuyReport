@@ -103,7 +103,6 @@
       <SubType>ASPXCodeBehind</SubType>
     </Content>
     <Content Include="ReportOutput\1823.html" />
-    <Content Include="Themes\config\default\Datepicker.html" />
     <Content Include="Themes\config\js\NBrightBuyPlugin.js" />
     <None Include="app.config" />
     <None Include="packages.config" />

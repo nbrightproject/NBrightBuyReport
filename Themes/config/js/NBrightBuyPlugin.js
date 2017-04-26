@@ -36,7 +36,7 @@
 
     });
 
-    $('#cmdExport').click(function () {
+    /*$('#cmdExport').click(function () {
         $('.processing').show();
         $('.resultspane').val('');
         NBrightBuyReport_nbxget('exportreport', '.reportlist', '.reportlist');
@@ -52,41 +52,12 @@
         $('.reportlist').hide();
         $('#cmdAdd').hide();
         $('#cmdreturn').show();
-    });
-
+    });*/
 
     // set the default edit language to the current langauge
     $('#editlang').val($('#selectparams #lang').val());
 
-    // get list of records via ajax:  NBrightRazorTemplate_nbxget({command}, {div of data passed to server}, {return html to this div} )
-    //NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
-    //FIRST CALL TO API DONE IN Admin.cshtml
 
-    /*   DONE IN Admin.cshtml
-  
-      $('.actionbuttonwrapper #cmdsave').click(function () {
-          NBrightBuyReport_nbxget('savedata', '#editdata');
-      });
-  
-     /* $('.actionbuttonwrapper #cmdreturn').click(function () {
-          $('#selecteditemid').val(''); // clear sleecteditemid.        
-          NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');
-      });
-  
-      $('.actionbuttonwrapper #cmddelete').click(function () {
-          if (confirm($('#deletemsg').val())) {
-              NBrightBuyReport_nbxget('deleterecord', '#editdata');
-          }
-      });
-  
-      $('#addnew').click(function () {
-          $('.processing').show();
-          $('#newitem').val('new');
-          $('#selecteditemid').val('');
-          NBrightBuyReport_nbxget('addnew', '#selectparams', '#editdata');
-      });
-  
-      */
     $('.selecteditlanguage').click(function () {
         $('#selectlang').val($(this).attr('lang')); // alter lang after, so we get correct data record
         NBrightBuyReport_nbxget('selectlang', '#editdata', '#editdata'); // do ajax call to save current edit form
@@ -171,7 +142,14 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         });
     }
 
-    
+    if (e.cmd == 'rundisplay') {
+        $('#runSQL').unbind();
+        $('#runSQL').click
+        (function () {
+            $('.processing').show();
+            NBrightBuyReport_nbxget('runreport', '#editdata', '#editdata');
+        });
+    }
 
     // check if we are displaying a list or the detail and do processing.
     if (($('#selecteditemid').val() != '') || (e.cmd == 'addnew')) {

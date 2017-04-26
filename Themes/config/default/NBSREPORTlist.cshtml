@@ -10,8 +10,6 @@
 <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
 <input id="selectlang" type="hidden" value="" /><!--used switch langauges -->
 
-<!--[Template:Datepicker.html]-->
-
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <div class="box">
@@ -46,7 +44,7 @@
                                         <i class="fa  @i fa-2x"></i>
                                     </td>
                                     <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td>
-                                    <td><span class="rundisplay" itemid="@x.ItemID">@ResourceKey("View.runreport")<i title="Générer le rapport" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
+                                    <td><span class="rundisplay" itemid="@x.ItemID">@ResourceKey("View.runreport")<i title="Generate a report" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
                                 </tr>
                                                 }
                                             }
