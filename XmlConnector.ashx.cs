@@ -102,6 +102,10 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             strOut = GetData(context);
                             break;
 
+                        case "rundisplay":
+                            strOut = GetData(context);
+                            break;
+
                         case "reportselection":
                             strOut = ReportSelection(context);
                             break;
@@ -162,6 +166,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var moduleid = ajaxInfo.GetXmlProperty("genxml/hidden/moduleid");
             var editlang = ajaxInfo.GetXmlProperty("genxml/hidden/editlang");
             var selectlang = ajaxInfo.GetXmlProperty("genxml/hidden/selectlang");
+            var rundisplay = ajaxInfo.GetXmlPropertyBool("genxml/hidden/rundisplay");
 
             if (selectlang != "") editlang = selectlang;
 
@@ -181,7 +186,15 @@ namespace Nevoweb.DNN.NBrightBuyReport
             {
                 // do edit field data if a itemid has been selected
                 var obj = objCtrl.Get(Convert.ToInt32(itemid), "", editlang);
-                strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
+                if (rundisplay)
+                {
+                    strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "run.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
+                }
+                else
+                {
+                    strOut = NBrightBuyUtils.RazorTemplRender(typeCode.ToLower() + "fields.cshtml", Convert.ToInt32(moduleid), _lang + itemid + editlang, obj, templateControl, "config", _lang, StoreSettings.Current.Settings());
+                }
+
 
             }
             else

@@ -36,17 +36,6 @@
 
     });
 
-    $('#cmdRun').click(function () {
-        $('.processing').show();
-        $('.resultspane').val('');
-        NBrightBuyReport_nbxget('runreport', '.reportlist', '.resultspane');
-        $('#cmdSave').hide();
-        $('#cmdDelete').hide();
-        $('#cmdReturn').show();
-        $('#cmdAdd').hide();
-        $('.resultsrow').show();
-    });
-
     $('#cmdExport').click(function () {
         $('.processing').show();
         $('.resultspane').val('');
@@ -150,22 +139,9 @@ function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, append
 }
 
 function NBrightBuyReport_nbxgetCompleted(e) {
-    $('.cmdSelection').unbind();
-    $('.cmdSelection').click
-        (function () {
-        $('.processing').show();
-        $('input[id*="_itemid_"]').val($(this).attr('itemid'));
-        nbxreportget('.runreport', '#selectparams', '.reportlist');
-        $('#cmdSave').hide();
-        $('#cmdDelete').hide();
-        $('#cmdReturn').show();
-        $('#cmdAdd').hide();
-        $('#cmdRun').show();
-        $('.resultsrow').hide();
-        $('#importshow').hide();
-        });
 
     $('#selectlang').val("");
+    $('#rundisplay').val("");   
 
     if (e.cmd == 'addnew') {
         $('#newitem').val(''); // clear item so if new was just created we don;t create another record
@@ -185,6 +161,17 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         //NBrightBuyReport_nbxget('getdata', '#selectparams', '#editdata');// relist after save
         NBrightBuyReport_nbxget('getreportlist', '#selectparams', '.reportlist');
     }
+
+    if (e.cmd == 'rundisplay') {
+        $('#runreport').unbind();
+        $('#runreport').click
+        (function () {
+            $('.processing').show();
+            NBrightBuyReport_nbxget('runreport', '#editdata', '#editdata');
+        });
+    }
+
+    
 
     // check if we are displaying a list or the detail and do processing.
     if (($('#selecteditemid').val() != '') || (e.cmd == 'addnew')) {
@@ -243,6 +230,7 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         });
 
     } else {
+
         //PROCESS LIST
         NBrightBuyReport_ListButtons();
         $('.edititem').unbind();
@@ -252,6 +240,16 @@ function NBrightBuyReport_nbxgetCompleted(e) {
             $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
             NBrightBuyReport_nbxget('editreport', '#selectparams', '#editdata'); // do ajax call to get edit form
         });
+
+        $('.rundisplay').unbind();
+        $('.rundisplay').click
+        (function () {
+            $('.processing').show();
+            $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
+            $('#rundisplay').val('true');            
+            NBrightBuyReport_nbxget('rundisplay', '#selectparams', '#editdata'); // do ajax call to get edit form
+        });
+
         $(".catdisplay").prop("disabled", true);
         $(".propdisplay").prop("disabled", true);
     }

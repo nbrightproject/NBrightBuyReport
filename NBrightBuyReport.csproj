@@ -107,6 +107,7 @@
     <Content Include="Themes\config\js\NBrightBuyPlugin.js" />
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Themes\config\default\NBSREPORTrun.cshtml" />
     <None Include="Themes\config\default\NBSREPORTfields.cshtml" />
     <None Include="Themes\config\default\NBSREPORTlist.cshtml" />
   </ItemGroup>
