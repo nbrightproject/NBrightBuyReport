@@ -30,6 +30,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
         private String _lang = "";
         private String _itemid = "";
         
+        
         public void ProcessRequest(HttpContext context)
 
         {
@@ -63,10 +64,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             break;
 
                         case "runreport":
-                            strOut = RunReport(context);
-                            break;
-
-                        case "runSQL":
                             strOut = RunReport(context);
                             break;
 
@@ -132,6 +129,78 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
             #endregion
 
+        }
+
+        private string RunReport(HttpContext context)
+        {
+            var strSql = "";
+            try
+            {
+                var settings = GetAjaxFields(context);
+                var strOut = "Error!! - Invalid ItemId on Run Report";
+
+                if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
+                {
+                    if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
+
+                    var objCtrl = new NBrightBuyController();
+                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
+                    if (obj != null)
+                    {
+                        var xlsTemp = obj.GetXmlProperty("genxml/textbox/templatexsl");
+                        strSql = obj.GetXmlProperty("genxml/textbox/sql");
+                        var extension = obj.GetXmlProperty("genxml/textbox/extension");
+                        // replace any settings tokens (This is used to place the form data into the SQL)
+                        strSql = Utils.ReplaceSettingTokens(strSql, settings);
+                        strSql = Utils.ReplaceUrlTokens((strSql));
+
+                        strSql = GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
+
+                        // add FOR XML if not there, this function will only output XML results.
+                        if (!strSql.ToLower().Contains("for xml")) strSql += "FOR XML PATH ('item'), ROOT ('root')";
+
+                        var strXmlResults = objCtrl.GetSqlxml(strSql);
+
+                        if (xlsTemp != "")
+                        {
+                            strOut = "";
+                            if (!strXmlResults.StartsWith("<root>")) strXmlResults = "<root>" + strXmlResults + "</root>"; // always wrap with root node.
+                            var strReportResults = XslUtils.XslTransInMemory(strXmlResults, xlsTemp);
+                            if (obj.GetXmlPropertyBool("genxml/checkbox/download"))
+                            {
+                                var k = Utils.GetUniqueKey(4); // use unique key so we don't get caching issues with browsers
+                                var filename = StoreSettings.Current.FolderTempMapPath + "\\reportdownload" + k + "." + extension.Trim('.');
+                                var relfilename = StoreSettings.Current.FolderTemp + "/reportdownload" + k + "." + extension.Trim('.');
+                                if (!settings.ContainsKey("filename")) settings.Add("filename", filename);
+                                Utils.SaveFile(filename, strReportResults);
+                                strOut = NBrightBuyUtils.GetTemplateData("display.cshtml", "", "config", settings);
+                            }
+                            strOut += "<br/>";
+                            if (obj.GetXmlPropertyBool("genxml/checkbox/inline"))
+                            {
+                                strOut += strReportResults;
+                            }
+                            var nbi = new NBrightInfo();
+                            nbi.XMLData = strXmlResults;
+                            var nods = nbi.XMLDoc.SelectNodes("root/*");
+                            if (nods != null)
+                            {
+                                strOut = strOut.Replace("[itemscount]", nods.Count.ToString(""));
+                            }
+                            strOut = GenXmlFunctions.RenderRepeater(obj, strOut);
+                        }
+                        else
+                        {
+                            strOut = "Error!! - XSL template required ";
+                        }
+                    }
+                }
+                return strOut;
+            }
+            catch (Exception ex)
+            {
+                return ex.ToString() + " <hr/> " + strSql;
+            }
         }
 
         public bool IsReusable
@@ -332,74 +401,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
             return "Error!! - Invalid ItemId on SaveReport";
         }
 
-        private String RunReport(HttpContext context)
-        {
-            var strSql = "";
-            try
-            {
-                var settings = GetAjaxFields(context);
-                var strOut = "Error!! - Invalid ItemId on Run Report";
 
-                if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
-                {
-                    if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
-
-                    var objCtrl = new NBrightBuyController();
-                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
-                    if (obj != null)
-                    {
-                        var xslTemp = obj.GetXmlProperty("genxml/textbox/templatexsl");
-                        strSql = obj.GetXmlProperty("genxml/textbox/sql");
-                        var extension = obj.GetXmlProperty("genxml/textbox/extension");
-                        // replace any settings tokens (This is used to place the form data into the SQL)
-                        strSql = Utils.ReplaceSettingTokens(strSql, settings);
-                        strSql = Utils.ReplaceUrlTokens(strSql);
-                        strSql = GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
-                        // add FOR XML if not there, this function will only output XML results.
-                        if (!strSql.ToLower().Contains("for xml")) strSql += " FOR XML PATH('item'), ROOT('root')";
-                        var strXmlResults = objCtrl.GetSqlxml(strSql);
-                        if (xslTemp != "")
-                        {
-                            strOut = "";
-                            if (!strXmlResults.StartsWith("<root>")) strXmlResults = "<root>" + strXmlResults + "</root>"; // always wrap with root node.
-                            var strReportResults = XslUtils.XslTransInMemory(strXmlResults, xslTemp);
-                            if (obj.GetXmlPropertyBool("genxml/checkbox/download"))
-                            {
-                                var k = Utils.GetUniqueKey(4); // use unique key so we don't get caching issues with browsers
-                                var filename = StoreSettings.Current.FolderTempMapPath + "\\reportdownload" + k + "." + extension.Trim('.');
-                                var relfilename = StoreSettings.Current.FolderTemp + "/reportdownload" + k + "." + extension.Trim('.');
-                                if (!settings.ContainsKey("filename")) settings.Add("filename", filename);
-                                Utils.SaveFile(filename, strReportResults);
-                                strOut = NBrightBuyUtils.GetTemplateData("Admin.cshtml", "", "config", settings);
-                            }
-                            strOut += "<br/>";
-                            if (obj.GetXmlPropertyBool("genxml/checkbox/inline"))
-                            {
-                                strOut += strReportResults;
-                            }
-                            var nbi = new NBrightInfo();
-                            nbi.XMLData = strXmlResults;
-                            var nods = nbi.XMLDoc.SelectNodes("root/*");
-                            if (nods != null)
-                            {
-                                strOut = strOut.Replace("[itemscount]", nods.Count.ToString(""));
-                            }
-                            strOut = GenXmlFunctions.RenderRepeater(obj, strOut);
-                        }
-                        else
-                        {
-                            strOut = "Error!! - XSL template required ";
-                        }
-                    }
-                }
-
-                return strOut;
-            }
-            catch (Exception ex)
-            {
-                return ex.ToString() + " <hr/> " + strSql;
-            }
-        }
 
         private String ReportSelection(HttpContext context)
 

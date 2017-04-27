@@ -1,4 +1,4 @@
-﻿@inherits NBrightBuy.render.NBrightBuyRazorTokens<NBrightDNN.NBrightRazor>
+@inherits NBrightBuy.render.NBrightBuyRazorTokens<NBrightDNN.NBrightRazor>
 @using System.Globalization
 @using System.Linq
 @using System.Web.UI.WebControls
@@ -9,8 +9,8 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
-The basic File Upload plugin 
-<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>
+<!-- The basic File Upload plugin
+<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>-->
 
 @{
     // assign Model, so we can resolve var in VS
@@ -22,7 +22,6 @@ The basic File Upload plugin
 <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
 <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
 <input id="selectlang" type="hidden" value="" /><!--used switch langauges -->
-
 <!--Report name  -->
 
 <div class="col-sm-5">
@@ -38,20 +37,9 @@ The basic File Upload plugin
 </div>
 
 
-<h4>RUN THE QUERY</h4>
+<h4>RUN</h4>
 
 <div class="actionbuttonwrapper">
     <button id="runreport" type="button" class="btn btn-primary">@ResourceKey("View.runreport")</button>
 </div>
-
-<script>
-    $(function() {
-        $('input[datatype=date]').datepicker();
-    });
-</script>
-
-
-
-
-
 

@@ -112,7 +112,7 @@ function NBrightBuyReport_nbxget(cmd, selformdiv, target, selformitemdiv, append
 function NBrightBuyReport_nbxgetCompleted(e) {
 
     $('#selectlang').val("");
-    $('#rundisplay').val("");   
+    $('#rundisplay').val("");
 
     if (e.cmd == 'addnew') {
         $('#newitem').val(''); // clear item so if new was just created we don;t create another record
@@ -142,9 +142,9 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         });
     }
 
-    if (e.cmd == 'rundisplay') {
-        $('#runSQL').unbind();
-        $('#runSQL').click
+    if (e.cmd == 'runreport') {
+        $('#runreport').unbind();
+        $('#runreport').click
         (function () {
             $('.processing').show();
             NBrightBuyReport_nbxget('runreport', '#editdata', '#editdata');
@@ -162,7 +162,7 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         } else {
             $('.catdisplay').hide();
             $('.propdisplay').show();
-            }
+        }
 
         $('input:radio[name=typeselectradio]').change(function () {
             if ($(this).val() == 'cat') {
@@ -224,7 +224,7 @@ function NBrightBuyReport_nbxgetCompleted(e) {
         (function () {
             $('.processing').show();
             $('#selecteditemid').val($(this).attr("itemid")); // assign the selected itemid, so the server knows what item is being edited
-            $('#rundisplay').val('true');            
+            $('#rundisplay').val('true');
             NBrightBuyReport_nbxget('rundisplay', '#selectparams', '#editdata'); // do ajax call to get edit form
         });
 
