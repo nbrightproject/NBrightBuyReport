@@ -173,7 +173,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                                 var relfilename = StoreSettings.Current.FolderTemp + "/reportdownload" + k + "." + extension.Trim('.');
                                 if (!settings.ContainsKey("filename")) settings.Add("filename", filename);
                                 Utils.SaveFile(filename, strReportResults);
-                                strOut = NBrightBuyUtils.GetTemplateData("display.cshtml", "", "config", settings);
+                                strOut = NBrightBuyUtils.GetTemplateData("run.cshtml", "", "config", settings);
                             }
                             strOut += "<br/>";
                             if (obj.GetXmlPropertyBool("genxml/checkbox/inline"))

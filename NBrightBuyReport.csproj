@@ -96,7 +96,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Themes\config\default\NBSREPORTdisplay.cshtml" />
     <None Include="Themes\config\default\Admin.cshtml" />
     <Content Include="Installation\pluginconfig.xml" />
     <Content Include="Admin.ascx">
