@@ -68,7 +68,7 @@
                         @CheckBox(info, "genxml/checkbox/disabled", rk1, "")
                     </div>
                 </div>
-            </div>
+        </div>
 
             <!--Report description-->
 
@@ -83,6 +83,27 @@
         <div class="col-sm-12">
             <label>@ResourceKey("Admin.sql")</label>
             @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
+        </div>
+        
+        <!--Html report-->
+
+        @{
+            var rk4 = ResourceKey("Admin.htmlreport").ToString();
+        }
+
+        <div class="col-sm-12">
+            @CheckBox(info, "genxml/checkbox/htmlreport", rk4, "")
+        </div>
+            
+            
+        <!--CVS report-->
+
+        @{
+            var rk5 = ResourceKey("Admin.cvsreport").ToString();
+        }
+
+        <div class="col-sm-12">
+            @CheckBox(info, "genxml/checkbox/cvsreport", rk5, "")
         </div>
     </div>
 </div>
