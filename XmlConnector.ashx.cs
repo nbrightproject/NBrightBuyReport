@@ -8,6 +8,8 @@ using System.Linq;
 using System.Net.Mime;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using DotNetNuke.Common.Utilities;
 using DotNetNuke.Entities.Portals;
 using DotNetNuke.Entities.Users;
@@ -32,7 +34,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
         
         
         public void ProcessRequest(HttpContext context)
-
         {
             var strOut = "";
             try
@@ -47,7 +48,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 strOut = "ERROR!! - No Security rights for current user!";
 
                 if (CheckRights())
-
                 {
                     switch (paramCmd)
                     {
@@ -136,22 +136,24 @@ namespace Nevoweb.DNN.NBrightBuyReport
             var strSql = "";
             try
             {
-                var settings = GetAjaxFields(context);
+                var ajaxInfo = NBrightBuyUtils.GetAjaxFields(context);
+                var itemid = ajaxInfo.GetXmlPropertyInt("genxml/hidden/itemid");
+                var razortemplate = ajaxInfo.GetXmlProperty("genxml/hidden/razortemplate");
+                var portalid = PortalSettings.Current.PortalId.ToString("");
+
                 var strOut = "Error!! - Invalid ItemId on Run Report";
 
-                if (settings.ContainsKey("itemid") && Utils.IsNumeric(settings["itemid"]))
+                if (itemid > 0)
                 {
-                    if (!settings.ContainsKey("portalid")) settings.Add("portalid", PortalSettings.Current.PortalId.ToString("")); // aways make sure we have portalid in settings
 
                     var objCtrl = new NBrightBuyController();
-                    var obj = objCtrl.Get(Convert.ToInt32(settings["itemid"]));
+                    var obj = objCtrl.Get(itemid);
                     if (obj != null)
                     {
-                        var xlsTemp = obj.GetXmlProperty("genxml/textbox/templatexsl");
                         strSql = obj.GetXmlProperty("genxml/textbox/sql");
                         var extension = obj.GetXmlProperty("genxml/textbox/extension");
                         // replace any settings tokens (This is used to place the form data into the SQL)
-                        strSql = Utils.ReplaceSettingTokens(strSql, settings);
+                        strSql = Utils.ReplaceSettingTokens(strSql, ajaxInfo.ToDictionary());
                         strSql = Utils.ReplaceUrlTokens((strSql));
 
                         strSql = GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
@@ -160,39 +162,27 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         if (!strSql.ToLower().Contains("for xml")) strSql += "FOR XML PATH ('item'), ROOT ('root')";
 
                         var strXmlResults = objCtrl.GetSqlxml(strSql);
+                        var xdoc = XDocument.Parse(strXmlResults);
 
-                        if (xlsTemp != "")
+                        var xmlList = new List<NBrightInfo>();
+                        foreach (XElement xmlitem in xdoc.XPathSelectElements("root/item"))
                         {
-                            strOut = "";
-                            if (!strXmlResults.StartsWith("<root>")) strXmlResults = "<root>" + strXmlResults + "</root>"; // always wrap with root node.
-                            var strReportResults = XslUtils.XslTransInMemory(strXmlResults, xlsTemp);
-                            if (obj.GetXmlPropertyBool("genxml/checkbox/download"))
-                            {
-                                var k = Utils.GetUniqueKey(4); // use unique key so we don't get caching issues with browsers
-                                var filename = StoreSettings.Current.FolderTempMapPath + "\\reportdownload" + k + "." + extension.Trim('.');
-                                var relfilename = StoreSettings.Current.FolderTemp + "/reportdownload" + k + "." + extension.Trim('.');
-                                if (!settings.ContainsKey("filename")) settings.Add("filename", filename);
-                                Utils.SaveFile(filename, strReportResults);
-                                strOut = NBrightBuyUtils.GetTemplateData("run.cshtml", "", "config", settings);
-                            }
-                            strOut += "<br/>";
-                            if (obj.GetXmlPropertyBool("genxml/checkbox/inline"))
-                            {
-                                strOut += strReportResults;
-                            }
-                            var nbi = new NBrightInfo();
-                            nbi.XMLData = strXmlResults;
-                            var nods = nbi.XMLDoc.SelectNodes("root/*");
-                            if (nods != null)
-                            {
-                                strOut = strOut.Replace("[itemscount]", nods.Count.ToString(""));
-                            }
-                            strOut = GenXmlFunctions.RenderRepeater(obj, strOut);
+                            var nbi = new NBrightInfo(false);
+                            nbi.XMLData = xmlitem.ToString();
+                            xmlList.Add(nbi);
                         }
-                        else
-                        {
-                            strOut = "Error!! - XSL template required ";
-                        }
+
+                        razortemplate = "reporthtml.cshtml"; // for testing
+                        var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
+
+                        var htmlOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList, templateControl, "config", _lang, StoreSettings.Current.Settings());
+
+                        var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + ".html";
+                        Utils.SaveFile(outfile, htmlOut);
+
+
+                        strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/"+ itemid + ".html' >View</a>";
+
                     }
                 }
                 return strOut;
