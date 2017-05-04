@@ -105,6 +105,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Themes\config\default\reportcsv.cshtml" />
+    <None Include="Themes\config\default\reporthtmlinline.cshtml" />
     <None Include="Themes\config\default\reporthtml.cshtml" />
     <None Include="Themes\config\default\NBSREPORTrun.cshtml" />
     <None Include="Themes\config\default\NBSREPORTfields.cshtml" />

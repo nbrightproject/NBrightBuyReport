@@ -20,7 +20,7 @@
                             <th>@ResourceKey("Admin.ref")</th>
                             <th>@ResourceKey("Admin.name")</th>
                             <th></th>
-                            <th>@ResourceKey("Admin.disabled")</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,16 +33,6 @@
                                 <tr>
                                     <td>@x.GUIDKey</td>
                                     <td>@x.GetXmlProperty("genxml/lang/genxml/textbox/name")</td>
-                                    <td></td>
-                                    <td>
-                                        @{var i = "fa-circle";
-                                            if (x.GetXmlPropertyBool("genxml/checkbox/disabled"))
-                                            {
-                                                i = "fa-check-circle";
-                                            }
-                                        }
-                                        <i class="fa  @i fa-2x"></i>
-                                    </td>
                                     <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td>
                                     <td><span class="rundisplay" itemid="@x.ItemID">@ResourceKey("View.runreport")<i title="Generate a report" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
                                 </tr>

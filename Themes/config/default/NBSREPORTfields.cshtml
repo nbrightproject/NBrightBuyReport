@@ -25,87 +25,48 @@
 
 <!--Report name  -->
 
-<div class="col-sm-5">
-    <h2>@ResourceKey("Admin.name")</h2>
-    @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
-</div>
 
-<!--Ref report -->
-
-<h4>@ResourceKey("Admin.ref"): @info.GUIDKey</h4>
 <div class="col-xs-12 col-sm-12">
     <div class="form-group">
         <div class="col-sm-12">
+
+            <div class="col-sm-5">
+                <label>@ResourceKey("Admin.name")</label>
+                @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
+            </div>
+
+            <!--In-line report-->
+            @{
+                var rk3 = ResourceKey("Admin.inline").ToString();
+            }
             <div class="col-sm-12">
-
-                <!--Download report-->
-
-                @{
-                    var rk2 = ResourceKey("Admin.download").ToString();
-                }
-
-                <div class="col-sm-12">
-                    @CheckBox(info, "genxml/checkbox/download", rk2, "")
-                </div>
-
-                <!--In-line report-->
-
-                @{
-                    var rk3 = ResourceKey("Admin.inline").ToString();
-                }
-
-                <div class="col-sm-12">
-                    @CheckBox(info, "genxml/checkbox/inline", rk3, "")
-                </div>
-
-                <!--Disabled checkbox  -->
-
-                @{
-                    var rk1 = ResourceKey("Admin.disabled").ToString();
-                }
-                <div class="form-group">
-                    <div class="col-sm-12">
-                        @CheckBox(info, "genxml/checkbox/disabled", rk1, "")
-                    </div>
-                </div>
-        </div>
+                @CheckBox(info, "genxml/checkbox/inline", rk3, "")
+            </div>
 
             <!--Report description-->
 
             <div class="col-sm-12">
-                <label>@ResourceKey("Admin.description")</label><img src='/Images/Flags/@(info.Lang).gif' width='16px' />
+                <label>@ResourceKey("Admin.description")</label><img src='/Images/Flags/@(info.Lang).gif' width='16px'/>
                 @TextArea(info, "genxml/lang/genxml/textbox/description", "class='form-control' rows='4' ")
             </div>
+
+            <!--SQL textbox-->
+            <div class="col-sm-12">
+                <label>@ResourceKey("Admin.sql")</label>
+                @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='12' ")
+            </div>
+
+            <!--Html report-->
+
+       <div class="col-sm-9">
+            <label>@ResourceKey("Admin.reportformat")</label>
+            @RadioButtonList(info, "genxml/radiobuttonlist/reportformat", "html,csv", "HTML,CSV","","html")
+        </div>
+        <div class="col-sm-3">
+            Ref: @info.GUIDKey  Id: @info.ItemID
         </div>
 
-        <!--SQL textbox-->
-        <div class="col-sm-12">
-            <label>@ResourceKey("Admin.sql")</label>
-            @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
-        </div>
-        
-        <!--Html report-->
-
-        @{
-            var rk4 = ResourceKey("Admin.htmlreport").ToString();
-        }
-
-        <div class="col-sm-12">
-            @CheckBox(info, "genxml/checkbox/htmlreport", rk4, "")
-        </div>
-            
-            
-        <!--CSV report-->
-
-        @{
-            var rk5 = ResourceKey("Admin.csvreport").ToString();
-        }
-
-        <div class="col-sm-12">
-            @CheckBox(info, "genxml/checkbox/csvreport", rk5, "")
-        </div>
     </div>
 </div>
-
 
 

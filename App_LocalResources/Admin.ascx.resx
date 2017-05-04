@@ -123,7 +123,7 @@
   <data name="code.Text" xml:space="preserve">
     <value>Code</value>
   </data>
-  <data name="cvsreport.Text" xml:space="preserve">
+  <data name="csvreport.Text" xml:space="preserve">
     <value>CSV Report</value>
   </data>
   <data name="deletemsg.Text" xml:space="preserve">
@@ -161,6 +161,9 @@
   </data>
   <data name="ref.Text" xml:space="preserve">
     <value>Ref</value>
+  </data>
+  <data name="reportformat.Text" xml:space="preserve">
+    <value>Report Format</value>
   </data>
   <data name="reports.Text" xml:space="preserve">
     <value>Reports</value>

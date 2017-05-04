@@ -25,25 +25,24 @@
 <input id="selectlang" type="hidden" value="" /><!--used switch langauges -->
 <!--Report name  -->
 
+
 <div class="col-sm-5">
-    <h2>@ResourceKey("Admin.name")</h2>
-    @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
+    <h2>@ResourceKey("Admin.name"): @info.GetXmlProperty("genxml/lang/genxml/textbox/name")</h2>
 </div>
 
-<!--SQL textbox-->
+<div class="col-xs-12 col-sm-12 ">
+    <div class="form-group">
+        <div class="col-sm-12">
 
-<div class="col-sm-12">
-    <label>@ResourceKey("Admin.sql")</label>
-    @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
+            <div class="col-sm-12">
+            </div>
+            <div class="actionbuttonwrapper">
+                <button id="runreport" type="button" class="btn btn-primary">@ResourceKey("Admin.runreport")</button>
+            </div>
+
+        </div>
+    </div>
 </div>
-
-
-<h4>RUN THE QUERY</h4>
-
-<div class="actionbuttonwrapper">
-    <button id="runreport" type="button" class="btn btn-primary">@ResourceKey("View.runreport")</button>
-</div>
-
 
 
 

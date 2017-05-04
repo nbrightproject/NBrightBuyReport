@@ -151,6 +151,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                     var obj = objCtrl.Get(itemid);
                     if (obj != null)
                     {
+                        var inline = obj.GetXmlPropertyBool("genxml/checkbox/inline");
                         strSql = obj.GetXmlProperty("genxml/textbox/sql");
                         var extension = obj.GetXmlProperty("genxml/textbox/extension");
                         // replace any settings tokens (This is used to place the form data into the SQL)
@@ -161,7 +162,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
 
                         // add FOR XML if not there, this function will only output XML results.
-                        if (!strSql.ToLower().Contains("for xml")) strSql += "FOR XML PATH ('item'), ROOT ('root')";
+                        if (!strSql.ToLower().Contains("for xml")) strSql += " FOR XML PATH ('item'), ROOT ('root')";
 
                         var strXmlResults = objCtrl.GetSqlxml(strSql);
                         var xdoc = XDocument.Parse(strXmlResults);
@@ -175,31 +176,39 @@ namespace Nevoweb.DNN.NBrightBuyReport
                                 xmlList.Add(nbi);
                             }
 
-                            razortemplate = "reporthtml.cshtml"; // for testing
-                            razortemplate = "reportcsv.cshtml";
                             var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
-
-                            var htmlOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList,
-                                templateControl, "config", _lang, StoreSettings.Current.Settings());
-
-                            var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + ".html";
-                            Utils.SaveFile(outfile, htmlOut);
-
-                            if (obj.GetXmlPropertyBool("genxml/checkbox/htmlreport"))
+                            if (obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") == "html")
                             {
-                                strOut = NBrightBuyUtils.GetTemplateData("reporthtml.cshtml", templateControl, "config",
-                                    StoreSettings.Current.Settings());
+                                if (inline)
+                                {
+                                    razortemplate = "reporthtmlinline.cshtml";
+                                }
+                                else
+                                {
+                                    razortemplate = "reporthtml.cshtml";
+                                }
+                            }
+                            if (obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") == "csv")
+                            {
+                                inline = false;
+                                razortemplate = "reportcsv.cshtml";
+                            }
+                            if (obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") == "barchart")
+                            {
+                                inline = true;
+                                razortemplate = "reportbar.cshtml";
                             }
 
-                           else (obj.GetXmlProperty("genxml/checkbox/csvreport"))
+
+                            strOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList,templateControl, "config", _lang, StoreSettings.Current.Settings());
+
+
+                            if (!inline)
                             {
-                                strOut = NBrightBuyUtils.GetTemplateData("reportcsv.cshtml", templateControl, "config",
-                                    StoreSettings.Current.Settings());
+                                var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + "." + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat");
+                                Utils.SaveFile(outfile, strOut);
+                                strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" + itemid + "." + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") + "' >View</a>";
                             }
-
-
-                            strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" +
-                                     itemid + ".html' >View</a>";
 
                         }
                         return strOut;
