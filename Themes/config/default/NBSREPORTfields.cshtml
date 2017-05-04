@@ -79,7 +79,6 @@
         </div>
 
         <!--SQL textbox-->
-
         <div class="col-sm-12">
             <label>@ResourceKey("Admin.sql")</label>
             @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
@@ -96,14 +95,14 @@
         </div>
             
             
-        <!--CVS report-->
+        <!--CSV report-->
 
         @{
-            var rk5 = ResourceKey("Admin.cvsreport").ToString();
+            var rk5 = ResourceKey("Admin.csvreport").ToString();
         }
 
         <div class="col-sm-12">
-            @CheckBox(info, "genxml/checkbox/cvsreport", rk5, "")
+            @CheckBox(info, "genxml/checkbox/csvreport", rk5, "")
         </div>
     </div>
 </div>

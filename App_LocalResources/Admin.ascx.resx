@@ -124,7 +124,7 @@
     <value>Code</value>
   </data>
   <data name="cvsreport.Text" xml:space="preserve">
-    <value>CVS Report</value>
+    <value>CSV Report</value>
   </data>
   <data name="deletemsg.Text" xml:space="preserve">
     <value>Delete Record?</value>

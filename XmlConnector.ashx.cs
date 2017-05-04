@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Web;
+using System.Web.UI.HtmlControls;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -31,8 +32,8 @@ namespace Nevoweb.DNN.NBrightBuyReport
     {
         private String _lang = "";
         private String _itemid = "";
-        
-        
+
+
         public void ProcessRequest(HttpContext context)
         {
             var strOut = "";
@@ -133,6 +134,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         private string RunReport(HttpContext context)
         {
+            var strOut = "Error!! - Invalid ItemId on Run Report";
             var strSql = "";
             try
             {
@@ -141,7 +143,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 var razortemplate = ajaxInfo.GetXmlProperty("genxml/hidden/razortemplate");
                 var portalid = PortalSettings.Current.PortalId.ToString("");
 
-                var strOut = "Error!! - Invalid ItemId on Run Report";
 
                 if (itemid > 0)
                 {
@@ -156,7 +157,8 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         strSql = Utils.ReplaceSettingTokens(strSql, ajaxInfo.ToDictionary());
                         strSql = Utils.ReplaceUrlTokens((strSql));
 
-                        strSql = GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
+                        strSql =
+                            GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
 
                         // add FOR XML if not there, this function will only output XML results.
                         if (!strSql.ToLower().Contains("for xml")) strSql += "FOR XML PATH ('item'), ROOT ('root')";
@@ -164,33 +166,52 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         var strXmlResults = objCtrl.GetSqlxml(strSql);
                         var xdoc = XDocument.Parse(strXmlResults);
 
-                        var xmlList = new List<NBrightInfo>();
-                        foreach (XElement xmlitem in xdoc.XPathSelectElements("root/item"))
                         {
-                            var nbi = new NBrightInfo(false);
-                            nbi.XMLData = xmlitem.ToString();
-                            xmlList.Add(nbi);
+                            var xmlList = new List<NBrightInfo>();
+                            foreach (XElement xmlitem in xdoc.XPathSelectElements("root/item"))
+                            {
+                                var nbi = new NBrightInfo(false);
+                                nbi.XMLData = xmlitem.ToString();
+                                xmlList.Add(nbi);
+                            }
+
+                            razortemplate = "reporthtml.cshtml"; // for testing
+                            razortemplate = "reportcsv.cshtml";
+                            var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
+
+                            var htmlOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList,
+                                templateControl, "config", _lang, StoreSettings.Current.Settings());
+
+                            var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + ".html";
+                            Utils.SaveFile(outfile, htmlOut);
+
+                            if (obj.GetXmlPropertyBool("genxml/checkbox/htmlreport"))
+                            {
+                                strOut = NBrightBuyUtils.GetTemplateData("reporthtml.cshtml", templateControl, "config",
+                                    StoreSettings.Current.Settings());
+                            }
+
+                           else (obj.GetXmlProperty("genxml/checkbox/csvreport"))
+                            {
+                                strOut = NBrightBuyUtils.GetTemplateData("reportcsv.cshtml", templateControl, "config",
+                                    StoreSettings.Current.Settings());
+                            }
+
+
+                            strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" +
+                                     itemid + ".html' >View</a>";
+
                         }
-
-                        razortemplate = "reporthtml.cshtml"; // for testing
-                        var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
-
-                        var htmlOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList, templateControl, "config", _lang, StoreSettings.Current.Settings());
-
-                        var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + ".html";
-                        Utils.SaveFile(outfile, htmlOut);
-
-
-                        strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/"+ itemid + ".html' >View</a>";
-
+                        return strOut;
                     }
                 }
-                return strOut;
             }
             catch (Exception ex)
             {
                 return ex.ToString() + " <hr/> " + strSql;
             }
+            return strOut;
+
         }
 
         public bool IsReusable
