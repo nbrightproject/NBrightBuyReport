@@ -3,6 +3,7 @@
 @using System.Globalization
 @using System.Xml
 @using NBrightDNN
+
 @foreach (NBrightInfo x in Model.List)
 {
     var strOut = "";
@@ -13,6 +14,6 @@
         {
             strOut += xNod.InnerText.Replace(";", ":") + ";";
         }
-        @(strOut.TrimEnd(';') + Environment.NewLine);
+        @(strOut.TrimEnd(';') + Environment.NewLine);//TrimEnd Method each data seperate by ';' in a column + display lines separate by newlines
     }
 }

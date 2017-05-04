@@ -10,9 +10,6 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
-<!--The basic File Upload plugin
-<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>-->
-
 @{
     // assign Model, so we can resolve var in VS
     var info = (NBrightInfo)Model.List.First();
@@ -23,8 +20,8 @@
 <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
 <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
 <input id="selectlang" type="hidden" value="" /><!--used switch langauges -->
-<!--Report name  -->
 
+<!--Report name  -->
 
 <div class="col-sm-5">
     <h2>@ResourceKey("Admin.name"): @info.GetXmlProperty("genxml/lang/genxml/textbox/name")</h2>

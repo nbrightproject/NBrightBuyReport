@@ -9,9 +9,6 @@
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
-<!-- The basic File Upload plugin 
-<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>-->
-
 @{
     // assign Model, so we can resolve var in VS
     var info = (NBrightInfo)Model.List.First();
@@ -21,18 +18,16 @@
 <input id="editlang" type="hidden" value="@info.Lang" />
 <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
 <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
-<input id="selectlang" type="hidden" value="" /><!--used switch langauges -->
-
-<!--Report name  -->
-
+<input id="selectlang" type="hidden" value="" /><!--used to switch languages -->
 
 <div class="col-xs-12 col-sm-12">
     <div class="form-group">
         <div class="col-sm-12">
-
+            
+            <!--Report name  -->
             <div class="col-sm-5">
-                <label>@ResourceKey("Admin.name")</label>
-                @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
+                <label>@ResourceKey("Admin.name")</label><!--Define in Admin.ascx.resx-->
+                @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")<!--Inject data from DB-->
             </div>
 
             <!--In-line report-->
@@ -58,15 +53,15 @@
 
             <!--Html report-->
 
-       <div class="col-sm-9">
-            <label>@ResourceKey("Admin.reportformat")</label>
-            @RadioButtonList(info, "genxml/radiobuttonlist/reportformat", "html,csv", "HTML,CSV","","html")
-        </div>
-        <div class="col-sm-3">
-            Ref: @info.GUIDKey  Id: @info.ItemID
-        </div>
+            <div class="col-sm-9">
+                <label>@ResourceKey("Admin.reportformat")</label>
+                @RadioButtonList(info, "genxml/radiobuttonlist/reportformat", "html,csv", "HTML,CSV", "", "html")
+            </div>
+            <div class="col-sm-3">
+               <label> Ref: @info.GUIDKey Id: @info.ItemID</label>
+            </div>
 
-    </div>
+        </div>
 </div>
 
 
