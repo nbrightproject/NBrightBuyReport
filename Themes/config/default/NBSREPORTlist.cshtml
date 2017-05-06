@@ -2,13 +2,12 @@
 @using System.Globalization
 @using NBrightDNN
 
-
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
 
 <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
 <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
-<input id="selectlang" type="hidden" value="" /><!--used switch langauges -->
+<input id="selectlang" type="hidden" value="" /><!--used switch langauges-->
 
 <div class="row">
     <div class="col-xs-12 col-sm-12">
@@ -17,10 +16,10 @@
                 <table class="table table-striped table-hover table-responsive">
                     <thead>
                         <tr style="width: 100%">
-                            <th>@ResourceKey("Admin.ref")</th>
-                            <th>@ResourceKey("Admin.name")</th>
-                            <th></th>
-                            <th>@ResourceKey("Admin.disabled")</th>
+                            <th>@ResourceKey("Admin.ref")</th><!--Name 'Ref' at the top of the chart -->
+                            <th>@ResourceKey("Admin.name")</th><!--Name 'Report name' at the top of the chart -->
+                            <th></th><!--Blank zone for 'Edit btn' at the top of the chart -->
+                            <th></th><!--Blank zone for 'Generate btn' at the top of the chart -->
                         </tr>
                     </thead>
                     <tbody>
@@ -31,23 +30,13 @@
                             if (x.ItemID > 0)
                             {
                                 <tr>
-                                    <td>@x.GUIDKey</td>
-                                    <td>@x.GetXmlProperty("genxml/lang/genxml/textbox/name")</td>
-                                    <td></td>
-                                    <td>
-                                        @{var i = "fa-circle";
-                                            if (x.GetXmlPropertyBool("genxml/checkbox/disabled"))
-                                            {
-                                                i = "fa-check-circle";
-                                            }
-                                        }
-                                        <i class="fa  @i fa-2x"></i>
-                                    </td>
-                                    <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td>
-                                    <td><span class="rundisplay" itemid="@x.ItemID">@ResourceKey("View.runreport")<i title="Generate a report" class="fa fa-cogs fa-fw fa-2x"></i></span></td>
+                                    <td>@x.GUIDKey</td><!--Inject data GUIDKey 'Ref' of DB-->
+                                    <td>@x.GetXmlProperty("genxml/lang/genxml/textbox/name")</td><!--Inject data name 'Report name' of DB-->
+                                    <td><span class="edititem" itemid="@x.ItemID">@ResourceKey("General.cmdEditIcon")</span></td><!--Define in Admin.ascx.resx-->
+                                    <td><span class="rundisplay" itemid="@x.ItemID">@ResourceKey("View.runreport")<i title="Generate a report" class="fa fa-cogs fa-fw fa-2x"></i></span></td><!--Define in Admin.ascx.resx-->
                                 </tr>
-                                                }
-                                            }
+                            }
+                        }
                     </tbody>
                 </table>
             </div>

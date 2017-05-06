@@ -2,15 +2,13 @@
 @using System.Globalization
 @using System.Linq
 @using System.Web.UI.WebControls
+@using DotNetNuke.Entities.Portals
 @using NBrightDNN
 @using Nevoweb.DNN.NBrightBuy.Components
 @using Nevoweb.DNN
 
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuy/App_LocalResources/")
 @AddMetaData("resourcepath", "/DesktopModules/NBright/NBrightBuyReport/App_LocalResources/")
-
-<!-- The basic File Upload plugin 
-<script src="/DesktopModules/NBright/NBrightBuy/Themes/config/js/jquery.fileupload.js"></script>-->
 
 @{
     // assign Model, so we can resolve var in VS
@@ -26,23 +24,22 @@
 <!--Report name  -->
 
 <div class="col-sm-5">
-    <h2>@ResourceKey("Admin.name")</h2>
-    @TextBox(info, "genxml/lang/genxml/textbox/name", "class='form-control'")
+    <h2>@ResourceKey("Admin.name"): @info.GetXmlProperty("genxml/lang/genxml/textbox/name")</h2>
 </div>
 
-<!--SQL textbox-->
+<div class="col-xs-12 col-sm-12 ">
+    <div class="form-group">
+        <div class="col-sm-12">
 
-<div class="col-sm-12">
-    <label>@ResourceKey("Admin.sql")</label>
-    @TextArea(info, "genxml/textbox/sql", "class='form-control' rows='4' ")
+            <div class="col-sm-12">
+            </div>
+            <div class="actionbuttonwrapper">
+                <button id="runreport" type="button" class="btn btn-primary">@ResourceKey("Admin.runreport")</button>
+            </div>
+
+        </div>
+    </div>
 </div>
 
-
-<h4>RUN</h4>
-
-<div class="actionbuttonwrapper">
-    <button id="runreport" type="button" class="btn btn-primary">@ResourceKey("View.runreport")</button>
-    <button id="runSQL" type="button" class="btn btn-primary" title="Run SQL query">@ResourceKey("View.runSQL")</button>
-</div>
 
 

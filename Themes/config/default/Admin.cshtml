@@ -30,17 +30,19 @@
 
 <!-- div section to pass param data to the server side ajax functions -->
 <div id="selectparams">
-    <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture"/> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
-    <input id="selecteditemid" type="hidden" value=""/> <!-- used as selected edit itemid -->
-    <input id="newitem" type="hidden" value=""/><!-- used to hold "new" token to create new record -->
-    <input id="typecode" type="hidden" value="NBSREPORT"/><!-- used as selected edit itemid -->
-    <input id="rundisplay" type="hidden" value=""/><!--used to generate a report-->
+    <input id="currentlang" type="hidden" value="@CultureInfo.CurrentCulture" /> <!-- get the current culture and pass to the ajax server side, so it knows what language is -->
+    <input id="selecteditemid" type="hidden" value="" /> <!-- used as selected edit itemid -->
+    <input id="newitem" type="hidden" value="" /><!-- used to hold "new" token to create new record -->
+    <input id="typecode" type="hidden" value="NBSREPORT" /><!-- used as selected edit itemid -->
+    <input id="rundisplay" type="hidden" value="" /><!--used to generate a report-->
 </div>
 
 <input id="deletemsg" type="hidden" value="@ResourceKey("Admin.deletemsg")" /> <!-- used for prompt on delete -->
 
 <div id="nbsnotify"></div>
 <div id="loader" class="processing" style="display:none;">@ResourceKey("General.ProcessingDiv")</div>
+
+<div id="editdata" class="reportlist"></div> <!-- used for display the report list -->
 
 <div id="pageactionssource">
     <!-- Page actions are moved into header bar - also exist at page bottom-->
@@ -49,17 +51,15 @@
             <i class="fa fa-bars"></i>
         </a>
         <div class="actionbuttonwrapper">
-            <button id="cmdsave" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdSaveButton")</button>             
+            <button id="cmdsave" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdSaveButton")</button>
             <button id="addnew" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.cmdAddButton")</button>
             <button id="cmddelete" type="button" class="btn btn-danger" style="display: none;">@ResourceKey("General.cmdDeleteButton")</button>
             <button id="cmdreturn" type="button" class="btn btn-default" style="display: none;">@ResourceKey("General.cmdReturnButton")</button>
             <button id="cmdRun" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("View.runreport")</button>
-            <button id="importshow" type="button" class="btn btn-primary" style="display: none;">@ResourceKey("General.Import")</button>
         </div>
     </div>
     <div class="col-xs-3 col-sm-3 top-panel-right">
-        @EditCultureSelect("editlanguage", "",false)
+        @EditCultureSelect("editlanguage", "", false)
     </div>
 </div>
 
-<div id="editdata" class="reportlist"></div>

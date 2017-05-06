@@ -96,16 +96,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Themes\config\default\display.cshtml" />
     <None Include="Themes\config\default\Admin.cshtml" />
     <Content Include="Installation\pluginconfig.xml" />
     <Content Include="Admin.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="ReportOutput\1823.html" />
     <Content Include="Themes\config\js\NBrightBuyPlugin.js" />
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Themes\config\default\reportcsv.cshtml" />
+    <None Include="Themes\config\default\reporthtmlinline.cshtml" />
+    <None Include="Themes\config\default\reporthtml.cshtml" />
     <None Include="Themes\config\default\NBSREPORTrun.cshtml" />
     <None Include="Themes\config\default\NBSREPORTfields.cshtml" />
     <None Include="Themes\config\default\NBSREPORTlist.cshtml" />
