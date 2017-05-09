@@ -153,7 +153,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                     {
                         var inline = obj.GetXmlPropertyBool("genxml/checkbox/inline");
                         strSql = obj.GetXmlProperty("genxml/textbox/sql");
-                        var extension = obj.GetXmlProperty("genxml/textbox/extension");
                         // replace any settings tokens (This is used to place the form data into the SQL)
                         strSql = Utils.ReplaceSettingTokens(strSql, ajaxInfo.ToDictionary());
                         strSql = Utils.ReplaceUrlTokens((strSql));
@@ -177,6 +176,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
                             }
 
                             var templateControl = "/DesktopModules/NBright/NBrightBuyReport";
+
                             if (obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") == "html")
                             {
                                 if (inline)
@@ -193,21 +193,21 @@ namespace Nevoweb.DNN.NBrightBuyReport
                                 inline = false;
                                 razortemplate = "reportcsv.cshtml";
                             }
+                            //project
                             if (obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") == "barchart")
                             {
                                 inline = true;
                                 razortemplate = "reportbar.cshtml";
                             }
 
-
                             strOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList,templateControl, "config", _lang, StoreSettings.Current.Settings());
-
 
                             if (!inline)
                             {
                                 var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + "." + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat");
                                 Utils.SaveFile(outfile, strOut);
-                                strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" + itemid + "." + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") + "' >View</a>";
+                                strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" + itemid + "." 
+                                + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") + "' >View</a>";
                             }
 
                         }
@@ -220,7 +220,6 @@ namespace Nevoweb.DNN.NBrightBuyReport
                 return ex.ToString() + " <hr/> " + strSql;
             }
             return strOut;
-
         }
 
         public bool IsReusable
