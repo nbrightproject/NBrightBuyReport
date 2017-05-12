@@ -14,8 +14,7 @@
         foreach (XmlNode xNod in xmlNodeList)
         {
             strOut += xNod.InnerText.Replace(";", ":") + ";";
-        }
-        <!--TrimEnd Method each data seperate by ';' in a column + display lines separate by newlines-->
-        @(strOut.TrimEnd(';') + Environment.NewLine);
+        }        
+        @(strOut.TrimEnd(';') + Environment.NewLine);//TrimEnd Method each data seperate by ';' in a column + display lines separate by newlines
     }
 }
