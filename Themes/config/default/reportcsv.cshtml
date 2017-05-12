@@ -15,6 +15,7 @@
         {
             strOut += xNod.InnerText.Replace(";", ":") + ";";
         }
-        @(strOut.TrimEnd(';') + Environment.NewLine);//TrimEnd Method each data seperate by ';' in a column + display lines separate by newlines
+        <!--TrimEnd Method each data seperate by ';' in a column + display lines separate by newlines-->
+        @(strOut.TrimEnd(';') + Environment.NewLine);
     }
 }
