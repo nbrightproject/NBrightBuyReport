@@ -12,7 +12,7 @@ namespace Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport
 {
     public class Filter : Components.Interfaces.FilterInterface
     {
-        public override string GetFilter(string currentFilter, NavigationData navigationData, ModSettings setting, HttpContext context)
+        public override string GetFilter(string currentFilter, NavigationData navigationData, ModSettings setting, NBrightInfo ajaxInfo)
         {
             throw new NotImplementedException();
         }
