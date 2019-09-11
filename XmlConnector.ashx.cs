@@ -134,7 +134,7 @@ namespace Nevoweb.DNN.NBrightBuyReport
 
         private string RunReport(HttpContext context)
         {
-            var strOut = "Error!! - Invalid ItemId on Run Report";
+            var strOut = "- No Data Returned -";
             var strSql = "";
             try
             {
@@ -157,17 +157,32 @@ namespace Nevoweb.DNN.NBrightBuyReport
                         strSql = Utils.ReplaceSettingTokens(strSql, ajaxInfo.ToDictionary());
                         strSql = Utils.ReplaceUrlTokens((strSql));
 
-                        strSql =
-                            GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
+                        strSql = GenXmlFunctions.StripSqlCommands(strSql); // don't allow anything to update through here.
 
                         // add FOR XML if not there, this function will only output XML results.
                         if (!strSql.ToLower().Contains("for xml")) strSql += " FOR XML PATH ('item'), ROOT ('root')";
 
                         var strXmlResults = objCtrl.GetSqlxml(strSql);
-                        var xdoc = XDocument.Parse(strXmlResults);
-
+                        if (strXmlResults != "")
                         {
+
+                            var xdoc = XDocument.Parse(strXmlResults);
+                            var headerInfo = new NBrightInfo(false);
+                            headerInfo.XMLData = "<item></item>";
+                            var elementsList = xdoc.XPathSelectElements("root/item[1]/*");
                             var xmlList = new List<NBrightInfo>();
+
+                            if (obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") == "csv")
+                            {
+                                var lp = 1;
+                                foreach (XElement xmlitem in elementsList)
+                                {
+                                    headerInfo.SetXmlProperty("item/header" + lp, xmlitem.Name.ToString());
+                                    lp += 1;
+                                }
+                                xmlList.Add(headerInfo);
+                            }
+
                             foreach (XElement xmlitem in xdoc.XPathSelectElements("root/item"))
                             {
                                 var nbi = new NBrightInfo(false);
@@ -200,14 +215,14 @@ namespace Nevoweb.DNN.NBrightBuyReport
                                 razortemplate = "reportbar.cshtml";
                             }
 
-                            strOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList,templateControl, "config", _lang, StoreSettings.Current.Settings());
+                            strOut = NBrightBuyUtils.RazorTemplRenderList(razortemplate, -1, "", xmlList, templateControl, "config", _lang, StoreSettings.Current.Settings());
 
                             if (!inline)
                             {
                                 var outfile = StoreSettings.Current.FolderTempMapPath + "\\" + itemid + "." + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat");
                                 Utils.SaveFile(outfile, strOut);
-                                strOut = "Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" + itemid + "." 
-                                + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") + "' >View</a>";
+                                strOut = "<br/><h1>Completed: <a target='_blank' href='" + StoreSettings.Current.FolderTemp + "/" + itemid + "."
+                                + obj.GetXmlProperty("genxml/radiobuttonlist/reportformat") + "?key=" + Utils.GetUniqueKey() + "' >View</a></h1>";
                             }
 
                         }
