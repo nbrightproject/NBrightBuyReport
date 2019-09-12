@@ -1,8 +1,8 @@
 ﻿<dotnetnuke type="Package" version="5.0">
 	<packages>
-		<package name="NBrightBuyReport" type="Module" version="1.0.0">
-			<friendlyName>NBrightBuyReport</friendlyName>
-			<description>NBS_Report - SECURITY WARNING This plugin will select data across ALL portals in the DNN installation.</description>
+		<package name="NBrightBuyReport" type="Module" version="1.0.1">
+			<friendlyName>OpenStore Reports</friendlyName>
+			<description>Report Plugin - SECURITY WARNING This plugin will select data across ALL portals in the DNN installation.</description>
 			<iconFile />
 			<owner>
 				<name>David Lee</name>

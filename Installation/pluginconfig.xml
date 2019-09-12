@@ -1,59 +1,28 @@
 <genxml>
-  <files />
   <hidden>
-    <plugintemplate>
-      <![CDATA[]]>
-    </plugintemplate>
-    <index>20</index>
+    <index datatype="double">20</index>
   </hidden>
   <textbox>
-    <ctrl>
-      <![CDATA[NBrightBuyReport]]>
-    </ctrl>
-    <name>
-      <![CDATA[NBrightBuyReport]]>
-    </name>
-    <icon>
-      <![CDATA[]]>
-    </icon>
-    <group>
-      <![CDATA[Utilities]]>
-    </group>
-    <path>
-      <![CDATA[/DesktopModules/NBright/NBrightBuyReport/Admin.ascx]]>
-    </path>
-    <help>
-      <![CDATA[]]>
-    </help>
-    <roles>
-      <![CDATA[Manager,Editor,Administrators]]>
-    </roles>
-    <description>
-      <![CDATA[]]>
-    </description>
-    <assembly>
-      <![CDATA[NBrightBuyReport]]>
-    </assembly>
-    <namespaceclass>
-      <![CDATA[Nevoweb.DNN.NBrightBuy.Providers.NBrightBuyReport.Events]]>
-    </namespaceclass>
+    <ctrl update="save">reports</ctrl>
+    <name update="save">Reports</name>
+    <icon update="save" />
+    <group update="save">Utilities</group>
+    <path update="save">/DesktopModules/NBright/NBrightBuyReport/Admin.ascx</path>
+    <help update="save" />
+    <description update="save" />
   </textbox>
   <checkbox>
-    <hidden>
-      <![CDATA[False]]>
-    </hidden>
-    <active>
-      <![CDATA[True]]>
-    </active>
+    <hidden update="save">False</hidden>
   </checkbox>
-  <dropdownlist>
-    <providertype selectedtext="Évènements">
-      <![CDATA[06]]>
-    </providertype>
-  </dropdownlist>
-  <checkboxlist />
+  <dropdownlist />
+  <checkboxlist>
+    <securityroles update="save">
+      <chk value="True" data="Administrators">Administrators</chk>
+      <chk value="False" data="Manager">Manager</chk>
+      <chk value="False" data="Editor">Editor</chk>
+      <chk value="False" data="ClientEditor">ClientEditor</chk>
+    </securityroles>
+  </checkboxlist>
   <radiobuttonlist />
+  <interfaces />
 </genxml>
-
-
-
